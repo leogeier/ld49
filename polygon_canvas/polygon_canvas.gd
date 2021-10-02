@@ -77,7 +77,10 @@ func _ready():
 	$MaskViewportB/MaskCanvas.brush_radius = brush_radius
 
 func _draw():
-	draw_circle(last_mouse_pos, brush_radius, Color.black)
+	var circle = GoostGeometry2D.circle(brush_radius)
+	circle.append(circle[0])
+	draw_set_transform(last_mouse_pos, 0, Vector2.ONE)
+	draw_polyline(circle, Color.black, 3)
 
 func _process(_delta):
 	last_mouse_pos = get_global_mouse_position()
