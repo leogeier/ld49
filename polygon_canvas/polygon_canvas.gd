@@ -177,15 +177,14 @@ func _process(_delta):
 	mask_canvas_b.last_mouse_pos = last_mouse_pos
 	update()
 
-	$Particles2D.position = get_global_mouse_position()
-	if Input.is_action_pressed("lclick") || Input.is_action_pressed("rclick"):
-		$Particles2D.emitting = true
-	else:
-		$Particles2D.emitting = false
-	if Input.is_action_pressed("rclick"):
-		$Particles2D.modulate = Color.blue
 	if Input.is_action_pressed("lclick"):
-		$Particles2D.modulate = Color.red
+		$ParticlesRed.emitting = true
+	else:
+		$ParticlesRed.emitting = false
+	if Input.is_action_pressed("rclick"):
+		$ParticlesBlue.emitting = true
+	else:
+		$ParticlesBlue.emitting = false
 
 	if dev_mode:
 		if Input.is_action_just_pressed("ui_right"):
@@ -196,7 +195,7 @@ func _process(_delta):
 				brush_mode = BrushMode.Mode.STATIC
 				$BrushModeLabel.text = "static"
 			mask_canvas_a.brush_mode = brush_mode
-			mask_canvas_a.brush_mode = brush_mode
+			mask_canvas_b.brush_mode = brush_mode
 		if Input.is_action_just_pressed("ui_accept"):
 			var time = OS.get_time()
 			var filepath = "res://level/configs/config-%d-%d-%d.json" % [time.hour, time.minute, time.second]

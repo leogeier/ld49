@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/splatter.png-3eaa0c30a371b2fb802f47e4532ba43b.stex"
+path="res://.import/canvas.png-65e66c3d2d706b267a0639041530cf8d.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://polygon_canvas/splatter.png"
-dest_files=[ "res://.import/splatter.png-3eaa0c30a371b2fb802f47e4532ba43b.stex" ]
+source_file="res://canvas.png"
+dest_files=[ "res://.import/canvas.png-65e66c3d2d706b267a0639041530cf8d.stex" ]
 
 [params]
 

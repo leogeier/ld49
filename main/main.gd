@@ -23,9 +23,9 @@ func create_bodies(polygons, color, layer, parent_node, dynamic = true):
 		body.set_color(color)
 		body.set_collision(layer)
 		body.name = str(identifier)
+		identifier += 1
 		if !dynamic:
 			body.mode = RigidBody2D.MODE_STATIC
-		identifier += 1
 		parent_node.add_child(body)
 		body.global_transform.origin = centroid # for some reason, this translation only works here, but not in stroke_body
 

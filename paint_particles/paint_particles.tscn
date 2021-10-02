@@ -1,0 +1,33 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://paint_particles/splatter.png" type="Texture" id=1]
+[ext_resource path="res://paint_particles/paint_particles.gd" type="Script" id=2]
+
+[sub_resource type="Gradient" id=1]
+offsets = PoolRealArray( 0.333333, 0.682171, 1 )
+colors = PoolColorArray( 1, 1, 1, 0.368627, 1, 1, 1, 0.476744, 1, 1, 1, 0 )
+
+[sub_resource type="GradientTexture" id=2]
+gradient = SubResource( 1 )
+
+[sub_resource type="ParticlesMaterial" id=3]
+lifetime_randomness = 0.33
+emission_shape = 1
+emission_sphere_radius = 9.69
+flag_disable_z = true
+gravity = Vector3( 0, 0, 0 )
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+angle = 360.0
+angle_random = 1.0
+scale = 0.0
+scale_random = 1.0
+color_ramp = SubResource( 2 )
+
+[node name="Particles2D" type="Particles2D"]
+emitting = false
+amount = 7
+local_coords = false
+process_material = SubResource( 3 )
+texture = ExtResource( 1 )
+script = ExtResource( 2 )
