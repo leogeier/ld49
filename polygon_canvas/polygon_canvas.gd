@@ -6,6 +6,7 @@ export(float) var brush_radius = 20
 export(int) var circle_detail = 20
 
 var polyBoolean = PolyBoolean2D.new_instance()
+var last_mouse_pos = Vector2.ZERO
 
 func generate_polygons():
 	print("Generating polygons...")
@@ -54,7 +55,11 @@ func _ready():
 	$MaskViewportA/MaskCanvas.brush_radius = brush_radius
 	$MaskViewportB/MaskCanvas.brush_radius = brush_radius
 
+func _draw():
+	draw_circle(last_mouse_pos, brush_radius, Color.black)
+
 func _process(_delta):
-	pass
-	# if Input.is_action_just_pressed("ui_accept"):
-	# 	generate_polygons()
+	last_mouse_pos = get_global_mouse_position()
+	$MaskViewportA/MaskCanvas.last_mouse_pos = last_mouse_pos
+	$MaskViewportB/MaskCanvas.last_mouse_pos = last_mouse_pos
+	update()
