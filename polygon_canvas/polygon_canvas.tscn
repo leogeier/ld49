@@ -74,5 +74,14 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="BrushModeLabel" type="Label" parent="."]
+visible = false
+margin_right = 40.0
+margin_bottom = 14.0
+text = "dynamic"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [connection signal="new_stroke" from="MaskViewportA/MaskCanvas" to="." method="on_new_stroke_a"]
 [connection signal="new_stroke" from="MaskViewportB/MaskCanvas" to="." method="on_new_stroke_b"]

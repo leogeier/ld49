@@ -13,7 +13,7 @@ func translated_polygon(polygon, offset):
 		translated.append(point)
 	return translated
 
-func create_bodies(polygons, color, layer, parent_node):
+func create_bodies(polygons, color, layer, parent_node, dynamic = true):
 	for polygon in polygons:
 		var centroid = GoostGeometry2D.polygon_centroid(polygon)
 		var offset_polygon = translated_polygon(polygon, -centroid)
@@ -23,6 +23,8 @@ func create_bodies(polygons, color, layer, parent_node):
 		body.set_color(color)
 		body.set_collision(layer)
 		body.name = str(identifier)
+		if !dynamic:
+			body.mode = RigidBody2D.MODE_STATIC
 		identifier += 1
 		parent_node.add_child(body)
 		body.global_transform.origin = centroid # for some reason, this translation only works here, but not in stroke_body
@@ -56,22 +58,28 @@ func remove_children(node):
 func clear():
 	remove_children($A)
 	remove_children($B)
-	$PolygonCanvas.clear()
+	# $PolygonCanvas.clear()
 
 func _ready():
 	pass
 
 
 func _process(_delta):
-	if Input.is_action_just_pressed("ui_accept"):
+	if Input.is_action_just_pressed("toggle"):
 		var polygons = $PolygonCanvas.generate_polygons()
 		print("Creating bodies")
 		create_bodies(polygons["a"], Color.red, 0, $A)
+		create_bodies(polygons["a_static"], Color.red, 0, $A, false)
 		create_bodies(polygons["b"], Color.blue, 1, $B)
+		create_bodies(polygons["b_static"], Color.blue, 1, $B, false)
 		print("Creating joints")
 		create_joints()
-		$PolygonCanvas.clear()
+		# $PolygonCanvas.clear()
+		$PolygonCanvas.visible = false
 	if Input.is_action_just_pressed("ui_cancel"):
+		$PolygonCanvas.visible = true
 		clear()
-	if Input.is_action_just_pressed("ui_left"):
+	if Input.is_action_just_pressed("ui_focus_next"):
 		$PolygonCanvas.undo_last_stroke()
+	if Input.is_action_just_pressed("ui_left"):
+		$PolygonCanvas.load_from_file("res://level/configs/" + $Level.config_file)

@@ -1,24 +1,32 @@
 extends Node2D
 
-
 export(int) var mouse_button = BUTTON_LEFT
 export(float) var brush_radius = 20
 export(int) var circle_detail = 20
 
+export(bool) var dev_mode = false
+
+var BrushMode = preload("res://polygon_canvas/brush_mode.gd")
+
+onready var mask_canvas_a = $MaskViewportA/MaskCanvas
+onready var mask_canvas_b = $MaskViewportB/MaskCanvas
+
 var polyBoolean = PolyBoolean2D.new_instance()
 var last_mouse_pos = Vector2.ZERO
 var stroke_history = []
+var brush_mode = BrushMode.Mode.DYNAMIC
 
-func add_stroke_to_history(brush_index, canvas):
-	stroke_history.append({"index": brush_index, "canvas": canvas})
+func add_stroke_to_history(brush_index, bmode, canvas):
+	stroke_history.append({"index": brush_index, "canvas": canvas, "brush_mode": bmode})
+	print(stroke_history)
 
-func on_new_stroke_a(brush_index):
-	print("New stroke for a")
-	add_stroke_to_history(brush_index, $MaskViewportA/MaskCanvas)
+func on_new_stroke_a(brush_index, bmode):
+	print("New stroke for A")
+	add_stroke_to_history(brush_index, bmode, mask_canvas_a)
 
-func on_new_stroke_b(brush_index):
-	print("New stroke for b")
-	add_stroke_to_history(brush_index, $MaskViewportB/MaskCanvas)
+func on_new_stroke_b(brush_index, bmode):
+	print("New stroke for B")
+	add_stroke_to_history(brush_index, bmode, mask_canvas_b)
 
 func undo_last_stroke():
 	if stroke_history.empty():
@@ -27,20 +35,22 @@ func undo_last_stroke():
 
 	var last = stroke_history.pop_back()
 	print("Undoing stroke ", last)
-	last["canvas"].resize_brushes(last["index"])
+	last["canvas"].resize_brushes(last["index"], last["brush_mode"])
 
 func generate_polygons():
 	print("Generating polygons...")
 	return {
-		"a": generate_polygons_for_positions($MaskViewportA/MaskCanvas.brush_positions),
-		"b": generate_polygons_for_positions($MaskViewportB/MaskCanvas.brush_positions)
+		"a": generate_polygons_for_positions(mask_canvas_a.brush_positions),
+		"a_static": generate_polygons_for_positions(mask_canvas_a.brush_positions_static, true),
+		"b": generate_polygons_for_positions(mask_canvas_b.brush_positions),
+		"b_static": generate_polygons_for_positions(mask_canvas_b.brush_positions_static, true),
 		}
 
 func clear():
-	$MaskViewportA/MaskCanvas.clear()
-	$MaskViewportB/MaskCanvas.clear()
+	mask_canvas_a.clear()
+	mask_canvas_b.clear()
 
-func generate_polygons_for_positions(positions):
+func generate_polygons_for_positions(positions, is_static = false):
 	if positions.empty():
 		print("no positions to generate circles for")
 		return []
@@ -52,7 +62,7 @@ func generate_polygons_for_positions(positions):
 	var merged_polygons = extract_outermost_polygons(polyBoolean.boolean_polygons_tree(circles, [], PolyBoolean2D.OP_UNION))
 	print(merged_polygons.size(), " polygons after merge")
 
-	if $PolygonBounds == null:
+	if $PolygonBounds == null || is_static:
 		return merged_polygons
 
 	print("Clipping...")
@@ -88,9 +98,55 @@ func generate_circle(position):
 
 	return arr
 
+func split_vector_array(arr):
+	var split_arr = []
+	for vec in arr:
+		split_arr.append({"x": vec.x, "y": vec.y})
+	return split_arr
+
+func join_vector_array(arr):
+	var join_arr = []
+	for vec in arr:
+		join_arr.append(Vector2(vec["x"], vec["y"]))
+	return join_arr
+
+func save_to_file(filepath):
+	print("Saving to ", filepath, "...")
+	var data = {
+		"a": {
+			"dynamic": split_vector_array(mask_canvas_a.brush_positions),
+			"static": split_vector_array(mask_canvas_a.brush_positions_static),
+			},
+		"b": {
+			"dynamic": split_vector_array(mask_canvas_b.brush_positions),
+			"static": split_vector_array(mask_canvas_b.brush_positions_static),
+			},
+		"both": {
+			"dynamic": [],
+			"static": [],
+			},
+		}
+	var file = File.new()
+	file.open(filepath, File.WRITE)
+	file.store_string(JSON.print(data))
+	file.close()
+
+func load_from_file(filepath):
+	print("Loading from ", filepath, "...")
+	var file = File.new()
+	file.open(filepath, File.READ)
+	var content = file.get_as_text()
+	file.close()
+	var data = JSON.parse(content).result
+	mask_canvas_a.brush_positions = join_vector_array(data["a"]["dynamic"])
+	mask_canvas_a.brush_positions_static = join_vector_array(data["a"]["static"])
+	mask_canvas_b.brush_positions = join_vector_array(data["b"]["dynamic"])
+	mask_canvas_b.brush_positions_static = join_vector_array(data["b"]["static"])
+
 func _ready():
-	$MaskViewportA/MaskCanvas.brush_radius = brush_radius
-	$MaskViewportB/MaskCanvas.brush_radius = brush_radius
+	$BrushModeLabel.visible = dev_mode
+	mask_canvas_a.brush_radius = brush_radius
+	mask_canvas_b.brush_radius = brush_radius
 
 func _draw():
 	var circle = GoostGeometry2D.circle(brush_radius)
@@ -100,6 +156,21 @@ func _draw():
 
 func _process(_delta):
 	last_mouse_pos = get_global_mouse_position()
-	$MaskViewportA/MaskCanvas.last_mouse_pos = last_mouse_pos
-	$MaskViewportB/MaskCanvas.last_mouse_pos = last_mouse_pos
+	mask_canvas_a.last_mouse_pos = last_mouse_pos
+	mask_canvas_b.last_mouse_pos = last_mouse_pos
 	update()
+
+	if dev_mode:
+		if Input.is_action_just_pressed("ui_right"):
+			if brush_mode == BrushMode.Mode.STATIC:
+				brush_mode = BrushMode.Mode.DYNAMIC 
+				$BrushModeLabel.text = "dynamic"
+			else:
+				brush_mode = BrushMode.Mode.STATIC
+				$BrushModeLabel.text = "static"
+			mask_canvas_a.brush_mode = brush_mode
+			mask_canvas_a.brush_mode = brush_mode
+		if Input.is_action_just_pressed("ui_accept"):
+			var time = OS.get_time()
+			var filepath = "res://level/configs/config-%d-%d-%d.json" % [time.hour, time.minute, time.second]
+			save_to_file(filepath)
