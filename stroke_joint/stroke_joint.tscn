@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://stroke_joint/pin.png" type="Texture" id=1]
+
+[node name="StrokeJoint" type="PinJoint2D"]
+
+[node name="pin" type="Sprite" parent="."]
+texture = ExtResource( 1 )

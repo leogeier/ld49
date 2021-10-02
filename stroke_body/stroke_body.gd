@@ -1,7 +1,13 @@
 extends RigidBody2D
 
 
-func set_polygon(polygon):
+var polygon
+var had_first_joint_pass = false
+
+
+func set_polygon(new_polygon):
+	polygon = new_polygon
+
 	var centroid = GoostGeometry2D.polygon_centroid(polygon)
 	# global_transform.origin = centroid
 
