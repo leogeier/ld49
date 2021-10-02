@@ -35,7 +35,8 @@ func undo_last_stroke():
 
 	var last = stroke_history.pop_back()
 	print("Undoing stroke ", last)
-	last["canvas"].resize_brushes(last["index"], last["brush_mode"])
+	last["canvas"].undo(last["brush_mode"])
+	# last["canvas"].resize_brushes(last["index"], last["brush_mode"])
 
 func generate_polygons():
 	print("Generating polygons...")
@@ -50,16 +51,20 @@ func clear():
 	mask_canvas_a.clear()
 	mask_canvas_b.clear()
 
-func generate_polygons_for_positions(positions, is_static = false):
-	if positions.empty():
-		print("no positions to generate circles for")
+func generate_polygons_for_positions(strokes, is_static = false):
+	if strokes.empty():
+		print("no strokes to generate circles for")
 		return []
-	var circles = []
-	for position in positions:
-		circles.append(generate_circle(position))
-	print("Merging ", circles.size(), " polygons...")
+	var shapes = []
+	for stroke in strokes:
+		for i in range(stroke.size()):
+			shapes.append(generate_circle(stroke[i]))
+			if i > 0:
+				shapes.append(generate_rect(stroke[i], stroke[i - 1]))
+
+	print("Merging ", shapes.size(), " polygons...")
 	# var merged_polygons = polyBoolean.merge_polygons(circles)
-	var merged_polygons = extract_outermost_polygons(polyBoolean.boolean_polygons_tree(circles, [], PolyBoolean2D.OP_UNION))
+	var merged_polygons = extract_outermost_polygons(polyBoolean.boolean_polygons_tree(shapes, [], PolyBoolean2D.OP_UNION))
 	print(merged_polygons.size(), " polygons after merge")
 
 	if $PolygonBounds == null || is_static:
@@ -88,6 +93,7 @@ func extract_outermost_polygons(tree):
 	return polygons
 
 func generate_circle(position):
+	print(position)
 	var printed = false
 	var arr = PoolVector2Array()
 	var fcircle_detail = float(circle_detail)
@@ -97,6 +103,17 @@ func generate_circle(position):
 			printed = true
 
 	return arr
+
+func generate_rect(pos, prev_pos):
+	var dir = prev_pos.direction_to(pos)
+	var orth = dir.rotated(PI / 2)
+	var offset = orth * brush_radius
+	return PoolVector2Array([
+		pos + offset,
+		prev_pos + offset,
+		prev_pos - offset,
+		pos - offset
+		])
 
 func split_vector_array(arr):
 	var split_arr = []

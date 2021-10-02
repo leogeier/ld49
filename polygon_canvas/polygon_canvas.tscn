@@ -63,7 +63,7 @@ margin_right = 1024.0
 margin_bottom = 576.0
 color = Color( 0, 0, 0, 1 )
 script = ExtResource( 2 )
-mouse_button = 2
+mouse_button = "rclick"
 
 [node name="Combination" type="ColorRect" parent="."]
 show_behind_parent = true
