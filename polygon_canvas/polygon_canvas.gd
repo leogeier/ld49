@@ -48,8 +48,10 @@ func generate_polygons_for_positions(positions):
 	for position in positions:
 		circles.append(generate_circle(position))
 	print("Merging ", circles.size(), " polygons")
-	var merged_polygons = PolyBoolean2D.merge_polygons(circles)
+	# var merged_polygons = polyBoolean.merge_polygons(circles)
+	var merged_polygons = extract_outermost_polygons(polyBoolean.boolean_polygons_tree(circles, [], PolyBoolean2D.OP_UNION))
 	print(merged_polygons.size(), " polygons after merge")
+
 	# print("Clipping")
 	# var size = $Combination.rect_size
 	# var bounding_polygon = PoolVector2Array([Vector2(0, 0), Vector2(size.x, 0), size, Vector2(0, size.y)])
@@ -58,7 +60,14 @@ func generate_polygons_for_positions(positions):
 		# clipped_polygons.append(PolyBoolean2D.intersect_polygons(bounding_polygon, polygon))
 	# print(clipped_polygons.size(), " polygons after clipping")
 	# print(clipped_polygons)
+
 	return merged_polygons
+
+func extract_outermost_polygons(tree):
+	var polygons = []
+	for child in tree.get_children():
+		polygons.append(child.points)
+	return polygons
 
 func generate_circle(position):
 	var printed = false

@@ -6,13 +6,13 @@
 [ext_resource path="res://title.png" type="Texture" id=4]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 434.009, 31.9365 )
+extents = Vector2( 434.009, 336.035 )
 
 [node name="Main" type="Node2D"]
 script = ExtResource( 3 )
 
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
-position = Vector2( 439.71, 504.794 )
+position = Vector2( 510.781, 861.685 )
 collision_layer = 3
 collision_mask = 3
 
@@ -20,7 +20,7 @@ collision_mask = 3
 shape = SubResource( 1 )
 
 [node name="icon" type="Sprite" parent="StaticBody2D"]
-scale = Vector2( 13.5975, 1 )
+scale = Vector2( 13.5975, 10.3756 )
 texture = ExtResource( 2 )
 
 [node name="B" type="Node2D" parent="."]
