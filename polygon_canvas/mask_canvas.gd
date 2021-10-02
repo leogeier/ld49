@@ -7,6 +7,10 @@ var brush_radius
 var brush_positions = []
 
 
+func clear():
+	brush_positions.clear()
+	update()
+
 func _ready():
 	pass
 
