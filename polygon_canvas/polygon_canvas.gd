@@ -47,21 +47,29 @@ func generate_polygons_for_positions(positions):
 	var circles = []
 	for position in positions:
 		circles.append(generate_circle(position))
-	print("Merging ", circles.size(), " polygons")
+	print("Merging ", circles.size(), " polygons...")
 	# var merged_polygons = polyBoolean.merge_polygons(circles)
 	var merged_polygons = extract_outermost_polygons(polyBoolean.boolean_polygons_tree(circles, [], PolyBoolean2D.OP_UNION))
 	print(merged_polygons.size(), " polygons after merge")
 
-	# print("Clipping")
-	# var size = $Combination.rect_size
-	# var bounding_polygon = PoolVector2Array([Vector2(0, 0), Vector2(size.x, 0), size, Vector2(0, size.y)])
-	# var clipped_polygons = []
-	# for polygon in merged_polygons:
-		# clipped_polygons.append(PolyBoolean2D.intersect_polygons(bounding_polygon, polygon))
-	# print(clipped_polygons.size(), " polygons after clipping")
-	# print(clipped_polygons)
+	if $PolygonBounds == null:
+		return merged_polygons
 
-	return merged_polygons
+	print("Clipping...")
+	var bounds_position = $PolygonBounds.rect_position
+	var bounds_size = $PolygonBounds.rect_size
+	var bounding_polygon = PoolVector2Array([
+		bounds_position + Vector2(0, 0),
+		bounds_position + Vector2(bounds_size.x, 0),
+		bounds_position + bounds_size,
+		bounds_position + Vector2(0, bounds_size.y)
+		])
+	var clipped_polygons = []
+	for polygon in merged_polygons:
+		clipped_polygons.append_array(GoostGeometry2D.intersect_polygons(polygon, bounding_polygon))
+	print(clipped_polygons.size(), " polygons after clipping")
+
+	return clipped_polygons
 
 func extract_outermost_polygons(tree):
 	var polygons = []
@@ -81,7 +89,6 @@ func generate_circle(position):
 	return arr
 
 func _ready():
-	# polyBoolean.parameters.clip_fill_rule = 1
 	$MaskViewportA/MaskCanvas.brush_radius = brush_radius
 	$MaskViewportB/MaskCanvas.brush_radius = brush_radius
 
