@@ -8,9 +8,16 @@ onready var project_size = Vector2(ProjectSettings.get_setting("display/window/s
 var brush_radius
 var brush_positions = []
 var last_mouse_pos = Vector2.ZERO # ultra jank
+var mouse_is_just_pressed = true
+
+signal new_stroke(brush_index)
 
 func clear():
 	brush_positions.clear()
+	update()
+
+func resize_brushes(index):
+	brush_positions.resize(index)
 	update()
 
 func _ready():
@@ -23,12 +30,10 @@ func _draw():
 
 func _process(_delta):
 	if Input.is_mouse_button_pressed(mouse_button):
-		var offset = (OS.get_window_size() - project_size) / 2
-		# print(offset)
-		# print(OS.get_window_size())
-		# print(project_size)
-		offset.y *= -1
-		# brush_positions.append(get_global_mouse_position() - offset)
+		if mouse_is_just_pressed:
+			mouse_is_just_pressed = false
+			emit_signal("new_stroke", brush_positions.size())
 		brush_positions.append(last_mouse_pos)
-		# print(brush_positions.size())
 		update()
+	else:
+		mouse_is_just_pressed = true

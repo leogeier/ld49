@@ -73,3 +73,6 @@ margin_bottom = 576.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[connection signal="new_stroke" from="MaskViewportA/MaskCanvas" to="." method="on_new_stroke_a"]
+[connection signal="new_stroke" from="MaskViewportB/MaskCanvas" to="." method="on_new_stroke_b"]

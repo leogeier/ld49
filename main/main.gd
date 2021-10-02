@@ -37,7 +37,7 @@ func create_joints():
 			var trans_poly_b = translated_polygon(body_b.polygon, body_b.position)
 			var intersections = GoostGeometry2D.intersect_polygons(trans_poly_a, trans_poly_b)
 			for intersection in intersections:
-				print("Found intersection between ", body_a.name, " ", body_b.name)
+				print("Found intersection between ", body_a.name, " and ", body_b.name)
 				var joint = stroke_joint.instance()
 				joint.position = GoostGeometry2D.polygon_centroid(intersection) - body_a.position
 				joint.node_a = body_a.get_path()
@@ -73,3 +73,5 @@ func _process(_delta):
 		$PolygonCanvas.clear()
 	if Input.is_action_just_pressed("ui_cancel"):
 		clear()
+	if Input.is_action_just_pressed("ui_left"):
+		$PolygonCanvas.undo_last_stroke()

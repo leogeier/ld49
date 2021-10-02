@@ -7,6 +7,27 @@ export(int) var circle_detail = 20
 
 var polyBoolean = PolyBoolean2D.new_instance()
 var last_mouse_pos = Vector2.ZERO
+var stroke_history = []
+
+func add_stroke_to_history(brush_index, canvas):
+	stroke_history.append({"index": brush_index, "canvas": canvas})
+
+func on_new_stroke_a(brush_index):
+	print("New stroke for a")
+	add_stroke_to_history(brush_index, $MaskViewportA/MaskCanvas)
+
+func on_new_stroke_b(brush_index):
+	print("New stroke for b")
+	add_stroke_to_history(brush_index, $MaskViewportB/MaskCanvas)
+
+func undo_last_stroke():
+	if stroke_history.empty():
+		print("No stroke to undo!")
+		return
+
+	var last = stroke_history.pop_back()
+	print("Undoing stroke ", last)
+	last["canvas"].resize_brushes(last["index"])
 
 func generate_polygons():
 	print("Generating polygons...")
