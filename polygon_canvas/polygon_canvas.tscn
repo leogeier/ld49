@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://polygon_canvas/polygon_canvas.gd" type="Script" id=1]
 [ext_resource path="res://polygon_canvas/mask_canvas.gd" type="Script" id=2]
+[ext_resource path="res://polygon_canvas/splatter.png" type="Texture" id=3]
 
 [sub_resource type="Shader" id=1]
 code = "shader_type canvas_item;
@@ -37,6 +38,27 @@ shader_param/color_b = Color( 0, 0, 1, 1 )
 shader_param/color_ab = Color( 0, 1, 0, 1 )
 shader_param/mask_a = SubResource( 2 )
 shader_param/mask_b = SubResource( 3 )
+
+[sub_resource type="Gradient" id=6]
+offsets = PoolRealArray( 0.333333, 1 )
+colors = PoolColorArray( 1, 1, 1, 1, 1, 1, 1, 0 )
+
+[sub_resource type="GradientTexture" id=7]
+gradient = SubResource( 6 )
+
+[sub_resource type="ParticlesMaterial" id=5]
+lifetime_randomness = 0.33
+emission_shape = 1
+emission_sphere_radius = 6.95
+flag_disable_z = true
+gravity = Vector3( 0, 0, 0 )
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+angle = 360.0
+angle_random = 1.0
+scale = 2.01
+scale_random = 1.0
+color_ramp = SubResource( 7 )
 
 [node name="PolygonCanvas" type="Node2D"]
 script = ExtResource( 1 )
@@ -82,6 +104,13 @@ text = "dynamic"
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Particles2D" type="Particles2D" parent="."]
+modulate = Color( 1, 0, 0, 0.513726 )
+amount = 20
+local_coords = false
+process_material = SubResource( 5 )
+texture = ExtResource( 3 )
 
 [connection signal="new_stroke" from="MaskViewportA/MaskCanvas" to="." method="on_new_stroke_a"]
 [connection signal="new_stroke" from="MaskViewportB/MaskCanvas" to="." method="on_new_stroke_b"]

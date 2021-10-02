@@ -177,6 +177,16 @@ func _process(_delta):
 	mask_canvas_b.last_mouse_pos = last_mouse_pos
 	update()
 
+	$Particles2D.position = get_global_mouse_position()
+	if Input.is_action_pressed("lclick") || Input.is_action_pressed("rclick"):
+		$Particles2D.emitting = true
+	else:
+		$Particles2D.emitting = false
+	if Input.is_action_pressed("rclick"):
+		$Particles2D.modulate = Color.blue
+	if Input.is_action_pressed("lclick"):
+		$Particles2D.modulate = Color.red
+
 	if dev_mode:
 		if Input.is_action_just_pressed("ui_right"):
 			if brush_mode == BrushMode.Mode.STATIC:
