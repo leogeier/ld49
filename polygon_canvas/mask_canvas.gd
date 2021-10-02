@@ -14,6 +14,7 @@ var last_mouse_pos = Vector2.ZERO # ultra jank
 var mouse_is_just_pressed = true
 var current_stroke
 var brush_mode = BrushMode.Mode.DYNAMIC
+var bounds = Rect2(Vector2.ZERO, OS.get_window_size())
 
 signal new_stroke(brush_index, brush_mode)
 
@@ -41,8 +42,9 @@ func undo(mode):
 	var brush_array = brush_positions
 	if mode == BrushMode.Mode.STATIC:
 		brush_array = brush_positions_static
-	brush_array.pop_back()
+	var last = brush_array.pop_back()
 	update()
+	return last == []
 
 func _ready():
 	pass
@@ -81,7 +83,7 @@ func _process(_delta):
 		current_stroke = []
 		brush_array.append(current_stroke)
 		emit_signal("new_stroke", brush_array.size(), brush_mode)
-	if Input.is_action_pressed(mouse_button):
+	if Input.is_action_pressed(mouse_button) && bounds.has_point(last_mouse_pos):
 		current_stroke.append(last_mouse_pos)
 		update()
 		

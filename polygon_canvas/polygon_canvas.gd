@@ -35,7 +35,9 @@ func undo_last_stroke():
 
 	var last = stroke_history.pop_back()
 	print("Undoing stroke ", last)
-	last["canvas"].undo(last["brush_mode"])
+	var was_empty = last["canvas"].undo(last["brush_mode"])
+	if was_empty:
+		undo_last_stroke()
 	# last["canvas"].resize_brushes(last["index"], last["brush_mode"])
 
 func generate_polygons():
@@ -164,6 +166,11 @@ func _ready():
 	$BrushModeLabel.visible = dev_mode
 	mask_canvas_a.brush_radius = brush_radius
 	mask_canvas_b.brush_radius = brush_radius
+
+	if $PolygonBounds != null:
+		var bounds = Rect2($PolygonBounds.rect_position, $PolygonBounds.rect_size)
+		mask_canvas_a.bounds = bounds
+		mask_canvas_b.bounds = bounds
 
 func _draw():
 	var circle = GoostGeometry2D.circle(brush_radius)

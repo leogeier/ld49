@@ -60,6 +60,9 @@ func clear():
 	remove_children($B)
 	# $PolygonCanvas.clear()
 
+func on_undo_button_pressed():
+	$PolygonCanvas.undo_last_stroke()
+
 func _ready():
 	pass
 
