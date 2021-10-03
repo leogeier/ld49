@@ -4,6 +4,7 @@ extends Node2D
 var stroke_body = preload("res://stroke_body/stroke_body.tscn")
 var stroke_joint = preload("res://stroke_joint/stroke_joint.tscn")
 var identifier = 0
+var is_running = false
 
 func translated_polygon(polygon, offset):
 	var translated = PoolVector2Array()
@@ -55,7 +56,7 @@ func remove_children(node):
 	for child in node.get_children():
 		child.queue_free()
 
-func clear():
+func clear_bodies():
 	remove_children($A)
 	remove_children($B)
 	# $PolygonCanvas.clear()
@@ -69,12 +70,8 @@ func clear_canvas():
 func on_clear_button_pressed():
 	clear_canvas()
 
-func _ready():
-	pass
-
-
-func _process(_delta):
-	if Input.is_action_just_pressed("toggle"):
+func toggle_running():
+	if !is_running:
 		$Interface/UndoButton.disabled = true
 		$Interface/ClearButton.disabled = true
 		var polygons = $PolygonCanvas.generate_polygons()
@@ -85,16 +82,33 @@ func _process(_delta):
 		create_bodies(polygons["b_static"], Color.blue, 1, $B, false)
 		print("Creating joints")
 		create_joints()
-		# $PolygonCanvas.clear()
 		$PolygonCanvas.visible = false
-	if Input.is_action_just_pressed("ui_cancel"):
+		$PolygonCanvas.drawing_enabled = false
+		$Interface/StartButton.visible = false
+		$Interface/StopButton.visible = true
+	else:
 		$PolygonCanvas.visible = true
+		$PolygonCanvas.drawing_enabled = true
 		$Interface/UndoButton.disabled = false
 		$Interface/ClearButton.disabled = false
-		clear()
+		$Interface/StartButton.visible = true
+		$Interface/StopButton.visible = false
+		clear_bodies()
+	is_running = !is_running
+
+func _ready():
+	pass
+
+
+func _process(_delta):
+	if Input.is_action_just_pressed("toggle"):
+		toggle_running()
+
 	if Input.is_action_just_pressed("undo"):
 		$PolygonCanvas.undo_last_stroke()
+
 	if Input.is_action_just_pressed("clear"):
 		clear_canvas()
+
 	if Input.is_action_just_pressed("ui_left"):
 		$PolygonCanvas.load_from_file("res://level/configs/" + $Level.config_file)

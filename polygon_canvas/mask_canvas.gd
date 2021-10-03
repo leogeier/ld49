@@ -18,6 +18,7 @@ var current_stroke
 var brush_mode = BrushMode.Mode.DYNAMIC
 var bounds = Rect2(Vector2.ZERO, OS.get_window_size())
 var stroke_area = 0
+var drawing_enabled = true
 
 signal new_stroke(brush_index, brush_mode)
 signal positions_added
@@ -94,7 +95,7 @@ func _draw():
 
 
 func _process(_delta):
-	if Input.is_action_just_pressed(mouse_button) && bounds.has_point(last_mouse_pos):
+	if Input.is_action_just_pressed(mouse_button) && bounds.has_point(last_mouse_pos) && drawing_enabled:
 		currently_drawing = true
 		var brush_array = brush_positions
 		if brush_mode == BrushMode.Mode.STATIC:
@@ -103,7 +104,7 @@ func _process(_delta):
 		brush_array.append(current_stroke)
 		emit_signal("new_stroke", brush_array.size(), brush_mode)
 
-	if currently_drawing && bounds.has_point(last_mouse_pos):
+	if currently_drawing && bounds.has_point(last_mouse_pos) && drawing_enabled:
 		current_stroke.append(last_mouse_pos)
 		emit_signal("positions_added")
 		update()

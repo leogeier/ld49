@@ -16,8 +16,14 @@ var polyBoolean = PolyBoolean2D.new_instance()
 var last_mouse_pos = Vector2.ZERO
 var stroke_history = []
 var brush_mode = BrushMode.Mode.DYNAMIC
+var drawing_enabled = true setget set_drawing_enabled
 
 signal stroke_count_changed(count_a, count_b)
+
+func set_drawing_enabled(val):
+	drawing_enabled = val
+	mask_canvas_a.drawing_enabled = drawing_enabled
+	mask_canvas_b.drawing_enabled = drawing_enabled
 
 func add_stroke_to_history(brush_index, bmode, canvas):
 	stroke_history.append({"index": brush_index, "canvas": canvas, "brush_mode": bmode})
@@ -230,7 +236,7 @@ func _process(_delta):
 				$BrushModeLabel.text = "static"
 			mask_canvas_a.brush_mode = brush_mode
 			mask_canvas_b.brush_mode = brush_mode
-		if Input.is_action_just_pressed("ui_accept"):
+		if Input.is_action_just_pressed("save"):
 			var time = OS.get_time()
 			var filepath = "res://level/configs/config-%d-%d-%d.json" % [time.hour, time.minute, time.second]
 			save_to_file(filepath)
