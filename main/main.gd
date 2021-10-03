@@ -127,13 +127,14 @@ func set_up_painting():
 	$Interface/ClearButton.disabled = false
 	$Interface/StartButton.visible = true
 	$Interface/StopButton.visible = false
+	$Interface/Continue.visible = false
 	is_running = false
 
 func next_level():
-	level_idx += 1
-	if level_idx > level_list.size():
+	if level_idx == level_list.size() - 1:
 		print("NO MORE LEVELS")
 		return
+	level_idx += 1
 	clear_canvas()
 	load_level()
 
@@ -152,7 +153,12 @@ func load_level():
 	$Interface/StrokeCountB.on_stroke_count_changed(0, 0)
 
 func on_level_complete():
-	next_level()
+	$Interface/Continue.visible = true
+	var counts = $PolygonCanvas.stroke_counts()
+	var level = $LevelContainer.get_child(0)
+	var good = counts["a"] <= level.max_strokes_a && counts["b"] <= level.max_strokes_b
+	$Interface/Continue/Good.visible = good
+	$Interface/Continue/Bad.visible = !good
 
 func _ready():
 	load_level()

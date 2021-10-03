@@ -10,7 +10,7 @@ extents = Vector2( 512, 53.541 )
 
 [node name="Level" type="Node2D"]
 script = ExtResource( 1 )
-max_strokes_a = 2
+max_strokes_a = 1
 max_strokes_b = 0
 
 [node name="Ground" type="StaticBody2D" parent="."]

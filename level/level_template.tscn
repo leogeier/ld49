@@ -38,6 +38,7 @@ collision_mask = 3
 [node name="Connectables" type="Node2D" parent="."]
 
 [node name="Connectable" parent="Connectables" instance=ExtResource( 3 )]
+position = Vector2( -142, 40 )
 
 [node name="Flag" parent="." instance=ExtResource( 6 )]
 position = Vector2( -164, 155.886 )

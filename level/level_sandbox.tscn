@@ -46,16 +46,16 @@ margin_bottom = 463.0
 [node name="Connectables" type="Node2D" parent="."]
 
 [node name="Connectable" parent="Connectables" instance=ExtResource( 3 )]
-position = Vector2( 150.41, 456.842 )
+position = Vector2( 231.227, 446.74 )
 
 [node name="Connectable2" parent="Connectables" instance=ExtResource( 3 )]
-position = Vector2( 917.051, 460.209 )
+position = Vector2( 809.295, 447.862 )
 
 [node name="Connectable3" parent="Connectables" instance=ExtResource( 3 )]
-position = Vector2( 904.704, 19.0818 )
+position = Vector2( 807.05, 17.9593 )
 
 [node name="Connectable4" parent="Connectables" instance=ExtResource( 3 )]
-position = Vector2( 147.042, 16.8369 )
+position = Vector2( 223.369, 17.9594 )
 
 [node name="Label" type="Label" parent="."]
 margin_left = 368.0

@@ -50,6 +50,9 @@ func on_new_stroke_b(brush_index, bmode):
 func emit_stroke_count_changed():
 	emit_signal("stroke_count_changed", mask_canvas_a.stroke_count(), mask_canvas_b.stroke_count())
 
+func stroke_counts():
+	return {"a": mask_canvas_a.stroke_count(), "b": mask_canvas_b.stroke_count()}
+
 func undo_last_stroke():
 	if stroke_history.empty():
 		print("No stroke to undo!")
