@@ -5,6 +5,11 @@ var stroke_body = preload("res://stroke_body/stroke_body.tscn")
 var stroke_joint = preload("res://stroke_joint/stroke_joint.tscn")
 var identifier = 0
 var is_running = false
+var level_idx = 0
+
+var level_list = [
+	preload("res://level/level1.tscn"),
+	]
 
 func translated_polygon(polygon, offset):
 	var translated = PoolVector2Array()
@@ -30,22 +35,31 @@ func create_bodies(polygons, color, layer, parent_node, dynamic = true):
 		parent_node.add_child(body)
 		body.global_transform.origin = centroid # for some reason, this translation only works here, but not in stroke_body
 
+func create_joints_between(body_a, body_b):
+	var trans_poly_a = translated_polygon(body_a.polygon, body_a.position)
+	var trans_poly_b = translated_polygon(body_b.polygon, body_b.position)
+	var intersections = GoostGeometry2D.intersect_polygons(trans_poly_a, trans_poly_b)
+	for intersection in intersections:
+		print("Found intersection between ", body_a.name, " and ", body_b.name)
+		var joint = stroke_joint.instance()
+		joint.position = GoostGeometry2D.polygon_centroid(intersection) - body_a.position
+		joint.node_a = body_a.get_path()
+		joint.node_b = body_b.get_path()
+		body_a.add_child(joint)
+
 func create_joints():
 	for body_a in $A.get_children():
 		for body_b in $B.get_children():
 			if body_a.had_first_joint_pass && body_b.had_first_joint_pass:
 				continue
+			create_joints_between(body_a, body_b)
 
-			var trans_poly_a = translated_polygon(body_a.polygon, body_a.position)
-			var trans_poly_b = translated_polygon(body_b.polygon, body_b.position)
-			var intersections = GoostGeometry2D.intersect_polygons(trans_poly_a, trans_poly_b)
-			for intersection in intersections:
-				print("Found intersection between ", body_a.name, " and ", body_b.name)
-				var joint = stroke_joint.instance()
-				joint.position = GoostGeometry2D.polygon_centroid(intersection) - body_a.position
-				joint.node_a = body_a.get_path()
-				joint.node_b = body_b.get_path()
-				body_a.add_child(joint)
+	var bodies = $A.get_children().duplicate()
+	bodies.append_array($B.get_children())
+	print("bodies ", bodies)
+	for connectable in $LevelContainer.get_child(0).get_node(@"Connectables").get_children():
+		for body in bodies:
+			create_joints_between(body, connectable)
 	
 	for body in $A.get_children():
 		body.had_first_joint_pass = true
@@ -96,6 +110,8 @@ func toggle_running():
 		$PolygonCanvas.drawing_enabled = false
 		$Interface/StartButton.visible = false
 		$Interface/StopButton.visible = true
+		for car in get_tree().get_nodes_in_group("car"):
+			car.start()
 	else:
 		$PolygonCanvas.visible = true
 		$PolygonCanvas.drawing_enabled = true
@@ -104,11 +120,30 @@ func toggle_running():
 		$Interface/StartButton.visible = true
 		$Interface/StopButton.visible = false
 		clear_bodies()
+		load_level()
 	is_running = !is_running
 
-func _ready():
-	pass
+func next_level():
+	level_idx += 1
+	if level_idx > level_list.size():
+		print("NO MORE LEVELS")
+		return
+	load_level()
 
+func load_level():
+	for child in $LevelContainer.get_children():
+		child.queue_free()
+	var level = level_list[level_idx].instance()
+	$PolygonCanvas.set_bounds(level.get_node(@"PolygonBounds"))
+	$LevelContainer.add_child(level)
+	$Interface/StrokeCountA.stroke_limit = level.max_strokes_a
+	$Interface/StrokeCountA.on_stroke_count_changed(0, 0)
+	$Interface/StrokeCountB.stroke_limit = level.max_strokes_b
+	$Interface/StrokeCountB.on_stroke_count_changed(0, 0)
+
+func _ready():
+	load_level()
+	$Mouse.brush_radius = $PolygonCanvas.brush_radius
 
 func _process(_delta):
 	if Input.is_action_just_pressed("toggle"):

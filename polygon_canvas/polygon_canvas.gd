@@ -21,6 +21,11 @@ var drawing_enabled = true setget set_drawing_enabled
 
 signal stroke_count_changed(count_a, count_b)
 
+func set_bounds(bounds_node):
+	var bounds = Rect2(bounds_node.rect_position, bounds_node.rect_size)
+	mask_canvas_a.bounds = bounds
+	mask_canvas_b.bounds = bounds
+
 func set_drawing_enabled(val):
 	drawing_enabled = val
 	mask_canvas_a.drawing_enabled = drawing_enabled
@@ -242,21 +247,12 @@ func _ready():
 
 
 	if $PolygonBounds != null && !dev_mode:
-		var bounds = Rect2($PolygonBounds.rect_position, $PolygonBounds.rect_size)
-		mask_canvas_a.bounds = bounds
-		mask_canvas_b.bounds = bounds
-
-func _draw():
-	var circle = GoostGeometry2D.circle(brush_radius)
-	circle.append(circle[0])
-	draw_set_transform(last_mouse_pos, 0, Vector2.ONE)
-	draw_polyline(circle, Color.black, 3)
+		set_bounds($PolygonBounds)
 
 func _process(_delta):
 	last_mouse_pos = get_global_mouse_position()
 	mask_canvas_a.last_mouse_pos = last_mouse_pos
 	mask_canvas_b.last_mouse_pos = last_mouse_pos
-	update()
 
 	if dev_mode:
 		if Input.is_action_just_pressed("ui_right"):
