@@ -63,8 +63,11 @@ func clear():
 func on_undo_button_pressed():
 	$PolygonCanvas.undo_last_stroke()
 
-func on_clear_button_pressed():
+func clear_canvas():
 	$PolygonCanvas.clear()
+
+func on_clear_button_pressed():
+	clear_canvas()
 
 func _ready():
 	pass
@@ -91,5 +94,7 @@ func _process(_delta):
 		clear()
 	if Input.is_action_just_pressed("undo"):
 		$PolygonCanvas.undo_last_stroke()
+	if Input.is_action_just_pressed("clear"):
+		clear_canvas()
 	if Input.is_action_just_pressed("ui_left"):
 		$PolygonCanvas.load_from_file("res://level/configs/" + $Level.config_file)
