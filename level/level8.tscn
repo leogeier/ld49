@@ -1,9 +1,8 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://level/font_small.tres" type="DynamicFont" id=1]
 [ext_resource path="res://polygon_bounds/PolygonBounds.tscn" type="PackedScene" id=2]
 [ext_resource path="res://level/level.gd" type="Script" id=3]
-[ext_resource path="res://car/car.tscn" type="PackedScene" id=4]
 [ext_resource path="res://button/button.tscn" type="PackedScene" id=5]
 [ext_resource path="res://flag/flag.tscn" type="PackedScene" id=6]
 [ext_resource path="res://connectable/connectable.tscn" type="PackedScene" id=7]
@@ -13,6 +12,8 @@ extents = Vector2( 512, 53.541 )
 
 [node name="Level" type="Node2D"]
 script = ExtResource( 3 )
+max_strokes_a = 2
+max_strokes_b = 2
 
 [node name="Ground" type="StaticBody2D" parent="."]
 position = Vector2( 512, 523 )
@@ -21,7 +22,6 @@ collision_mask = 3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Ground"]
 shape = SubResource( 1 )
-disabled = true
 
 [node name="Bodies" type="Node2D" parent="."]
 
@@ -30,13 +30,16 @@ collision_layer = 3
 collision_mask = 3
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Bodies/StaticBody2D"]
+polygon = PoolVector2Array( 715.314, -61.2033, 729.835, 254.885, 752.084, 264.421, 778.57, 252.766, 794.51, 235.782, 846.836, 203.255, 866.506, 211.447, 900.409, 269.718, 948.084, 302.561, 952.902, 384.274, 938.76, 421.044, 869.464, 445.085, 743.599, 456.399, 713.9, 494.583, 761.983, 614.791, 1030.68, 616.205, 1115.54, 224.468, 1039.17, -78.1738 )
 
 [node name="PolygonBounds" parent="." instance=ExtResource( 2 )]
+margin_left = 136.0
+margin_right = 701.0
 
 [node name="Connectables" type="Node2D" parent="."]
 
 [node name="Connectable" parent="Connectables" instance=ExtResource( 7 )]
-position = Vector2( -142, 40 )
+position = Vector2( 692.386, 76.7696 )
 
 [node name="Polygon2D" type="PolyCircle2D" parent="."]
 modulate = Color( 0.647059, 0, 0, 1 )
@@ -59,23 +62,9 @@ position = Vector2( -361.99, 182.756 )
 collision_layer = 2
 collision_mask = 2
 
-[node name="Car" parent="." instance=ExtResource( 4 )]
-position = Vector2( -84.4609, 241.785 )
-
-[node name="Car2" parent="." instance=ExtResource( 4 )]
-modulate = Color( 0, 0.439216, 1, 1 )
-position = Vector2( -324.877, 274.312 )
-collision_layer = 2
-collision_mask = 2
-
-[node name="Car3" parent="." instance=ExtResource( 4 )]
-modulate = Color( 1, 0, 0, 1 )
-position = Vector2( -218.811, 270.07 )
-collision_layer = 1
-collision_mask = 1
-
 [node name="Button" parent="." instance=ExtResource( 5 )]
-position = Vector2( -186.142, 348.271 )
+position = Vector2( 853.296, 250.705 )
+rotation = -2.12232
 
 [node name="Label" type="Label" parent="."]
 margin_left = -274.347

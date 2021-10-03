@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://level/font_small.tres" type="DynamicFont" id=1]
 [ext_resource path="res://polygon_bounds/PolygonBounds.tscn" type="PackedScene" id=2]
 [ext_resource path="res://level/level.gd" type="Script" id=3]
+[ext_resource path="res://car/car.tscn" type="PackedScene" id=4]
 [ext_resource path="res://button/button.tscn" type="PackedScene" id=5]
 [ext_resource path="res://flag/flag.tscn" type="PackedScene" id=6]
 [ext_resource path="res://connectable/connectable.tscn" type="PackedScene" id=7]
@@ -12,7 +13,7 @@ extents = Vector2( 512, 53.541 )
 
 [node name="Level" type="Node2D"]
 script = ExtResource( 3 )
-max_strokes_a = 1
+max_strokes_a = 4
 max_strokes_b = 1
 
 [node name="Ground" type="StaticBody2D" parent="."]
@@ -22,7 +23,6 @@ collision_mask = 3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Ground"]
 shape = SubResource( 1 )
-disabled = true
 
 [node name="Bodies" type="Node2D" parent="."]
 
@@ -31,17 +31,18 @@ collision_layer = 3
 collision_mask = 3
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Bodies/StaticBody2D"]
-polygon = PoolVector2Array( 654.503, -10.2916, 773.297, 3.85056, 852.493, 26.478, 938.76, 119.816, 991.086, 213.154, 1013.71, 313.563, 1056.14, 394.174, 1063.21, -69.6886, 655.917, -56.9606 )
+polygon = PoolVector2Array( -12.2442, 219.95, 177.452, 233.419, 359.295, 237.6, 355.291, 317.691, 324.589, 411.129, 331.264, 595.337, 683.682, 586.995, 685.927, 520.77, 669.09, 460.157, 651.131, 429.85, 647.763, 386.074, 762.255, 383.829, 756.642, 427.605, 740.928, 459.034, 736.438, 500.565, 1149.52, 547.283, 1161.85, 611.689, 28.1645, 627.404, -67.2448, 423.116 )
 
 [node name="PolygonBounds" parent="." instance=ExtResource( 2 )]
-margin_left = 347.0
-margin_right = 695.0
-margin_bottom = 141.0
+margin_left = 377.0
+margin_top = 20.0
+margin_right = 867.0
+margin_bottom = 337.0
 
 [node name="Connectables" type="Node2D" parent="."]
 
 [node name="Connectable" parent="Connectables" instance=ExtResource( 7 )]
-position = Vector2( 345.904, 92.3259 )
+position = Vector2( 732.32, 62.6923 )
 
 [node name="Polygon2D" type="PolyCircle2D" parent="."]
 modulate = Color( 0.647059, 0, 0, 1 )
@@ -56,7 +57,7 @@ collision_mask = 3
 
 [node name="Flag2" parent="." instance=ExtResource( 6 )]
 modulate = Color( 1, 0, 0, 1 )
-position = Vector2( -234.711, 185.584 )
+position = Vector2( 701.012, 368.457 )
 
 [node name="Flag3" parent="." instance=ExtResource( 6 )]
 modulate = Color( 0, 0, 1, 1 )
@@ -64,19 +65,23 @@ position = Vector2( -361.99, 182.756 )
 collision_layer = 2
 collision_mask = 2
 
+[node name="Car3" parent="." instance=ExtResource( 4 )]
+modulate = Color( 1, 0, 0, 1 )
+position = Vector2( 514.509, 189.329 )
+collision_layer = 1
+collision_mask = 1
+
 [node name="Button" parent="." instance=ExtResource( 5 )]
-position = Vector2( 238.122, 303.016 )
-rotation = 1.5708
+position = Vector2( -186.142, 348.271 )
 
 [node name="Label" type="Label" parent="."]
-margin_left = 634.698
-margin_top = 262.272
-margin_right = 972.698
-margin_bottom = 364.272
-rect_rotation = 7.3
+margin_left = -274.347
+margin_top = 81.4541
+margin_right = -210.347
+margin_bottom = 113.454
 custom_fonts/font = ExtResource( 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
-text = "Red and blue strokes will connect if they overlap as well"
+text = "text"
 align = 1
 valign = 1
 autowrap = true

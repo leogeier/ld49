@@ -15,6 +15,9 @@ var level_list = [
 	preload("res://level/level7.tscn"),
 	preload("res://level/level5.tscn"),
 	preload("res://level/level6.tscn"),
+	preload("res://level/level8.tscn"),
+	preload("res://level/level9.tscn"),
+	preload("res://level/level10.tscn"),
 	preload("res://level/level_sandbox.tscn"),
 	]
 

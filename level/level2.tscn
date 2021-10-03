@@ -59,6 +59,8 @@ radius = 10.0
 [node name="Flag" parent="." instance=ExtResource( 6 )]
 modulate = Color( 0, 1, 0, 1 )
 position = Vector2( 957.33, 280.618 )
+collision_layer = 3
+collision_mask = 3
 
 [node name="Car" parent="." instance=ExtResource( 5 )]
 position = Vector2( 63.7461, 212.987 )

@@ -49,13 +49,13 @@ radius = 10.0
 
 [node name="Flag" parent="." instance=ExtResource( 6 )]
 modulate = Color( 0, 1, 0, 1 )
-position = Vector2( 845.053, 276.874 )
+position = Vector2( -216.898, 289.347 )
 collision_layer = 3
 collision_mask = 3
 
 [node name="Flag2" parent="." instance=ExtResource( 6 )]
 modulate = Color( 1, 0, 0, 1 )
-position = Vector2( -232.929, 212.311 )
+position = Vector2( 846.84, 278.237 )
 
 [node name="Flag3" parent="." instance=ExtResource( 6 )]
 modulate = Color( 0, 0, 1, 1 )

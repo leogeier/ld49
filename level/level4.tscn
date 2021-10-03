@@ -31,13 +31,13 @@ collision_layer = 3
 collision_mask = 3
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Bodies/StaticBody2D"]
-polygon = PoolVector2Array( -38.9468, -97.235, 40.2491, -49.1518, 50.1486, 235.105, 89.7466, 399.154, 263.695, 491.078, 405.116, 532.09, 465.927, 554.717, 381.985, 591.962, -243.098, 519.837, -71.9777, -31.706 )
+polygon = PoolVector2Array( -38.9468, -97.235, 1066.97, -84.5071, 1076.87, 301.573, 842.108, 174.294, 836.451, 138.939, 810.996, -12.3822, 738.871, -44.9091, 535.224, -18.0391, 40.2491, -49.1518, 50.1486, 235.105, 89.7466, 399.154, 263.695, 491.078, 405.116, 532.09, 465.927, 554.717, 381.985, 591.962, -243.098, 519.837, -71.9777, -31.706 )
 
 [node name="PolygonBounds" parent="." instance=ExtResource( 2 )]
-margin_left = 617.43
-margin_top = 142.163
-margin_right = 812.43
-margin_bottom = 225.163
+margin_left = 621.673
+margin_top = 92.6651
+margin_right = 816.673
+margin_bottom = 175.665
 
 [node name="Connectables" type="Node2D" parent="."]
 

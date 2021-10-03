@@ -20,6 +20,7 @@ func car_arrived():
 		emit_signal("level_complete")
 
 func _ready():
+	$Ground/CollisionShape2D.disabled = true
 	for body in $Bodies.get_children():
 		var vis_polygon = Polygon2D.new()
 		vis_polygon.color = Color(166.0 / 255, 144.0 / 255, 0)
