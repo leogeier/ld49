@@ -27,6 +27,7 @@ position = Vector2( -30.9554, 209.18 )
 radius = 10.0
 
 [node name="Flag" parent="." instance=ExtResource( 3 )]
+modulate = Color( 0, 1, 0, 1 )
 position = Vector2( 927.159, 291.15 )
 
 [node name="Car" parent="." instance=ExtResource( 2 )]

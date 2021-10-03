@@ -1,18 +1,19 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=8 format=2]
 
-[ext_resource path="res://level/level.gd" type="Script" id=1]
+[ext_resource path="res://level/font_small.tres" type="DynamicFont" id=1]
 [ext_resource path="res://polygon_bounds/PolygonBounds.tscn" type="PackedScene" id=2]
-[ext_resource path="res://connectable/connectable.tscn" type="PackedScene" id=3]
-[ext_resource path="res://button/button.tscn" type="PackedScene" id=4]
-[ext_resource path="res://car/car.tscn" type="PackedScene" id=5]
+[ext_resource path="res://level/level.gd" type="Script" id=3]
+[ext_resource path="res://button/button.tscn" type="PackedScene" id=5]
 [ext_resource path="res://flag/flag.tscn" type="PackedScene" id=6]
-[ext_resource path="res://level/font_small.tres" type="DynamicFont" id=7]
+[ext_resource path="res://connectable/connectable.tscn" type="PackedScene" id=7]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 512, 53.541 )
 
 [node name="Level" type="Node2D"]
-script = ExtResource( 1 )
+script = ExtResource( 3 )
+max_strokes_a = 1
+max_strokes_b = 1
 
 [node name="Ground" type="StaticBody2D" parent="."]
 position = Vector2( 512, 523 )
@@ -29,13 +30,18 @@ collision_layer = 3
 collision_mask = 3
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Bodies/StaticBody2D"]
+polygon = PoolVector2Array( -38.9468, -97.235, 40.2491, -49.1518, 50.1486, 235.105, 89.7466, 399.154, 263.695, 491.078, 405.116, 532.09, 465.927, 554.717, 381.985, 591.962, -243.098, 519.837, -71.9777, -31.706 )
 
 [node name="PolygonBounds" parent="." instance=ExtResource( 2 )]
+margin_left = 617.43
+margin_top = 142.163
+margin_right = 812.43
+margin_bottom = 225.163
 
 [node name="Connectables" type="Node2D" parent="."]
 
-[node name="Connectable" parent="Connectables" instance=ExtResource( 3 )]
-position = Vector2( -142, 40 )
+[node name="Connectable" parent="Connectables" instance=ExtResource( 7 )]
+position = Vector2( 802.25, 158.639 )
 
 [node name="Polygon2D" type="PolyCircle2D" parent="."]
 modulate = Color( 0.647059, 0, 0, 1 )
@@ -45,20 +51,19 @@ radius = 10.0
 [node name="Flag" parent="." instance=ExtResource( 6 )]
 position = Vector2( -164, 155.886 )
 
-[node name="Car" parent="." instance=ExtResource( 5 )]
-position = Vector2( -158, 231.886 )
-
-[node name="Button" parent="." instance=ExtResource( 4 )]
-position = Vector2( -172, 329.886 )
+[node name="Button" parent="." instance=ExtResource( 5 )]
+position = Vector2( 855.405, 244.418 )
+rotation = -1.5708
 
 [node name="Label" type="Label" parent="."]
-margin_left = -274.347
-margin_top = 81.4541
-margin_right = -210.347
-margin_bottom = 113.454
-custom_fonts/font = ExtResource( 7 )
+margin_left = 162.28
+margin_top = 328.245
+margin_right = 491.28
+margin_bottom = 430.245
+rect_rotation = -4.4
+custom_fonts/font = ExtResource( 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
-text = "text"
+text = "Brush strokes attach to green boxes, but they can still rotate!"
 align = 1
 valign = 1
 autowrap = true

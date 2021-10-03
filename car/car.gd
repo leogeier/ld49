@@ -1,5 +1,7 @@
 extends RigidBody2D
 
+var has_arrived = false
+
 func start():
 	$RearWheel.applied_torque = 2500
 	$RearWheel.mode = RigidBody2D.MODE_RIGID
@@ -9,4 +11,5 @@ func start():
 
 
 func _ready():
-	pass
+	$RearWheel.layers = layers
+	$FrontWheel.layers = layers
