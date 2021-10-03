@@ -1,10 +1,9 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://level/level.gd" type="Script" id=1]
 [ext_resource path="res://car/car.tscn" type="PackedScene" id=2]
-[ext_resource path="res://flag/flag.png" type="Texture" id=3]
+[ext_resource path="res://flag/flag.tscn" type="PackedScene" id=3]
 [ext_resource path="res://polygon_bounds/PolygonBounds.tscn" type="PackedScene" id=4]
-[ext_resource path="res://connectable/connectable.tscn" type="PackedScene" id=5]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 512, 53.541 )
@@ -26,12 +25,11 @@ shape = SubResource( 1 )
 position = Vector2( -30.9554, 209.18 )
 radius = 10.0
 
-[node name="flag" type="Sprite" parent="."]
-position = Vector2( 916.459, 293.974 )
-texture = ExtResource( 3 )
+[node name="Flag" parent="." instance=ExtResource( 3 )]
+position = Vector2( 927.159, 291.15 )
 
-[node name="Car" parent="flag" instance=ExtResource( 2 )]
-position = Vector2( -826.132, -35.9188 )
+[node name="Car" parent="." instance=ExtResource( 2 )]
+position = Vector2( 90.7725, 255.16 )
 
 [node name="Bodies" type="Node2D" parent="."]
 
@@ -44,11 +42,10 @@ polygon = PoolVector2Array( 429.1, 285.373, 429.991, 308.091, 458.5, 307.645, 40
 
 [node name="PolygonBounds" parent="." instance=ExtResource( 4 )]
 margin_left = 311.0
-margin_top = 40.0
+margin_top = 190.0
 margin_right = 670.0
 margin_bottom = 384.0
 
 [node name="Connectables" type="Node2D" parent="."]
 
-[node name="Connectable" parent="Connectables" instance=ExtResource( 5 )]
-position = Vector2( 403.141, 89.1906 )
+[connection signal="flag_reached" from="Flag" to="." method="condition_fulfilled"]

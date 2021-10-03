@@ -1,14 +1,15 @@
 extends Node2D
 
+export(int) var level_idx = 0
 
 var stroke_body = preload("res://stroke_body/stroke_body.tscn")
 var stroke_joint = preload("res://stroke_joint/stroke_joint.tscn")
 var identifier = 0
 var is_running = false
-var level_idx = 0
 
 var level_list = [
 	preload("res://level/level1.tscn"),
+	preload("res://level/level_sandbox.tscn"),
 	]
 
 func translated_polygon(polygon, offset):
@@ -110,36 +111,48 @@ func toggle_running():
 		$PolygonCanvas.drawing_enabled = false
 		$Interface/StartButton.visible = false
 		$Interface/StopButton.visible = true
+		$LevelContainer.get_child(0).get_node("PolygonBounds").visible = false
 		for car in get_tree().get_nodes_in_group("car"):
 			car.start()
+		is_running = true
 	else:
-		$PolygonCanvas.visible = true
-		$PolygonCanvas.drawing_enabled = true
-		$Interface/UndoButton.disabled = false
-		$Interface/ClearButton.disabled = false
-		$Interface/StartButton.visible = true
-		$Interface/StopButton.visible = false
+		set_up_painting()
 		clear_bodies()
 		load_level()
-	is_running = !is_running
+
+func set_up_painting():
+	$PolygonCanvas.visible = true
+	$PolygonCanvas.drawing_enabled = true
+	$Interface/UndoButton.disabled = false
+	$Interface/ClearButton.disabled = false
+	$Interface/StartButton.visible = true
+	$Interface/StopButton.visible = false
+	is_running = false
 
 func next_level():
 	level_idx += 1
 	if level_idx > level_list.size():
 		print("NO MORE LEVELS")
 		return
+	clear_canvas()
 	load_level()
 
 func load_level():
+	clear_bodies()
+	set_up_painting()
 	for child in $LevelContainer.get_children():
 		child.queue_free()
 	var level = level_list[level_idx].instance()
+	level.connect("level_complete", self, "on_level_complete")
 	$PolygonCanvas.set_bounds(level.get_node(@"PolygonBounds"))
 	$LevelContainer.add_child(level)
 	$Interface/StrokeCountA.stroke_limit = level.max_strokes_a
 	$Interface/StrokeCountA.on_stroke_count_changed(0, 0)
 	$Interface/StrokeCountB.stroke_limit = level.max_strokes_b
 	$Interface/StrokeCountB.on_stroke_count_changed(0, 0)
+
+func on_level_complete():
+	next_level()
 
 func _ready():
 	load_level()

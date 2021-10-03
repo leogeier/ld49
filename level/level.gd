@@ -13,6 +13,6 @@ func condition_fulfilled():
 func _ready():
 	for body in $Bodies.get_children():
 		var vis_polygon = Polygon2D.new()
-		vis_polygon.color = Color.dimgray
+		vis_polygon.color = Color(166.0 / 255, 144.0 / 255, 0)
 		vis_polygon.polygon = body.get_node(@"CollisionPolygon2D").polygon
 		$Bodies.add_child(vis_polygon)

@@ -68,6 +68,7 @@ save={
 [physics]
 
 common/enable_pause_aware_picking=true
+2d/physics_engine="GodotPhysics"
 2d/default_gravity=980
 
 [rendering]

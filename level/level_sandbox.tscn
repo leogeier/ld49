@@ -1,17 +1,21 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://level/level.gd" type="Script" id=1]
 [ext_resource path="res://polygon_bounds/PolygonBounds.tscn" type="PackedScene" id=2]
 [ext_resource path="res://connectable/connectable.tscn" type="PackedScene" id=3]
-[ext_resource path="res://button/button.tscn" type="PackedScene" id=4]
-[ext_resource path="res://car/car.tscn" type="PackedScene" id=5]
-[ext_resource path="res://flag/flag.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Oliver-Regular.ttf" type="DynamicFontData" id=4]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 512, 53.541 )
 
+[sub_resource type="DynamicFont" id=2]
+size = 28
+font_data = ExtResource( 4 )
+
 [node name="Level" type="Node2D"]
 script = ExtResource( 1 )
+max_strokes_a = 999
+max_strokes_b = 999
 
 [node name="Ground" type="StaticBody2D" parent="."]
 position = Vector2( 512, 523 )
@@ -34,16 +38,33 @@ collision_mask = 3
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Bodies/StaticBody2D"]
 
 [node name="PolygonBounds" parent="." instance=ExtResource( 2 )]
+margin_left = 6.0
+margin_top = 7.0
+margin_right = 1018.0
+margin_bottom = 463.0
 
 [node name="Connectables" type="Node2D" parent="."]
 
 [node name="Connectable" parent="Connectables" instance=ExtResource( 3 )]
+position = Vector2( 150.41, 456.842 )
 
-[node name="Flag" parent="." instance=ExtResource( 6 )]
-position = Vector2( -164, 155.886 )
+[node name="Connectable2" parent="Connectables" instance=ExtResource( 3 )]
+position = Vector2( 917.051, 460.209 )
 
-[node name="Car" parent="." instance=ExtResource( 5 )]
-position = Vector2( -158, 231.886 )
+[node name="Connectable3" parent="Connectables" instance=ExtResource( 3 )]
+position = Vector2( 904.704, 19.0818 )
 
-[node name="Button" parent="." instance=ExtResource( 4 )]
-position = Vector2( -172, 329.886 )
+[node name="Connectable4" parent="Connectables" instance=ExtResource( 3 )]
+position = Vector2( 147.042, 16.8369 )
+
+[node name="Label" type="Label" parent="."]
+margin_left = 368.0
+margin_top = 35.919
+margin_right = 657.0
+margin_bottom = 67.919
+custom_fonts/font = SubResource( 2 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "Thanks  for  playing!"
+__meta__ = {
+"_edit_use_anchors_": false
+}
