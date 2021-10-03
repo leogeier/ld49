@@ -21,6 +21,7 @@ collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Ground"]
 shape = SubResource( 1 )
+disabled = true
 
 [node name="Polygon2D" type="PolyCircle2D" parent="."]
 position = Vector2( -30.9554, 209.18 )
@@ -40,7 +41,7 @@ collision_layer = 3
 collision_mask = 3
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Bodies/StaticBody2D"]
-polygon = PoolVector2Array( 429.1, 285.373, 429.991, 308.091, 458.5, 307.645, 406.071, 519.485, 587.366, 525.478, 532.678, 318.712, 561.146, 319.461, 562.251, 302.01, 1050, 313, 1052.33, 610.082, -38.2383, 595.399, -35.4149, 282.061 )
+polygon = PoolVector2Array( 429.1, 285.373, 429.991, 308.091, 458.5, 307.645, 391.861, 572.468, 594.026, 567.711, 532.678, 318.712, 561.146, 319.461, 562.251, 302.01, 1050, 313, 1052.33, 610.082, -38.2383, 595.399, -35.4149, 282.061 )
 
 [node name="PolygonBounds" parent="." instance=ExtResource( 4 )]
 margin_left = 311.0
@@ -58,7 +59,7 @@ margin_bottom = 403.408
 rect_rotation = 7.7
 custom_fonts/font = ExtResource( 5 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
-text = "Left Click to draw red Strokes"
+text = "Left Click to paint red Strokes"
 align = 1
 valign = 1
 autowrap = true

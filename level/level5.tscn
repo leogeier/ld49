@@ -12,6 +12,8 @@ extents = Vector2( 512, 53.541 )
 
 [node name="Level" type="Node2D"]
 script = ExtResource( 3 )
+max_strokes_a = 3
+max_strokes_b = 0
 
 [node name="Ground" type="StaticBody2D" parent="."]
 position = Vector2( 512, 523 )
@@ -69,14 +71,14 @@ collision_layer = 1
 collision_mask = 1
 
 [node name="Label" type="Label" parent="."]
-margin_left = 692.322
-margin_top = 66.5288
-margin_right = 958.322
-margin_bottom = 168.529
+margin_left = 760.922
+margin_top = 26.5457
+margin_right = 995.922
+margin_bottom = 128.546
 rect_rotation = 2.3
 custom_fonts/font = ExtResource( 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
-text = "Colored cars only collide with their color."
+text = "Colored cars only collide with the same color"
 align = 1
 valign = 1
 autowrap = true

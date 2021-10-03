@@ -23,7 +23,7 @@ font_data = ExtResource( 13 )
 
 [node name="Main" type="Node2D"]
 script = ExtResource( 3 )
-level_idx = 4
+level_idx = 6
 
 [node name="canvas" type="Sprite" parent="."]
 position = Vector2( 509.949, 341.522 )
@@ -120,14 +120,14 @@ __meta__ = {
 }
 
 [node name="Bad" type="Label" parent="Interface/Continue"]
-margin_left = 219.0
+margin_left = 200.0
 margin_top = 74.121
-margin_right = 805.0
+margin_right = 824.0
 margin_bottom = 203.121
 custom_fonts/font = SubResource( 2 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
-text = "Brush stroke limit exceeded!
-Try again to improve or continue on."
+text = "You used too many brush strokes!
+Try to improve or feel free to continue"
 align = 1
 valign = 1
 __meta__ = {

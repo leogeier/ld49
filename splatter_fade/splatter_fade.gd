@@ -17,11 +17,9 @@ func start_fade(polygons, color = Color.red):
 		var size = poly_image.get_size()
 		blender.blend_rect(poly_image, Rect2(Vector2.ZERO, size), image, Vector2.ZERO)
 	var image_texture = ImageTexture.new()
-	print(image.detect_alpha())
 	image_texture.create_from_image(image)
 	$Sprite.texture = image_texture
 
-	print($Timer.is_stopped())
 	$Timer.start()
 
 func on_timer_end():

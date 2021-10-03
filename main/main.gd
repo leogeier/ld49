@@ -12,7 +12,9 @@ var level_list = [
 	preload("res://level/level2.tscn"),
 	preload("res://level/level3.tscn"),
 	preload("res://level/level4.tscn"),
+	preload("res://level/level7.tscn"),
 	preload("res://level/level5.tscn"),
+	preload("res://level/level6.tscn"),
 	preload("res://level/level_sandbox.tscn"),
 	]
 
@@ -61,7 +63,6 @@ func create_joints():
 
 	var bodies = $A.get_children().duplicate()
 	bodies.append_array($B.get_children())
-	print("bodies ", bodies)
 	for connectable in $LevelContainer.get_child(0).get_node(@"Connectables").get_children():
 		for body in bodies:
 			create_joints_between(body, connectable)

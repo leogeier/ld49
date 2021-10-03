@@ -32,6 +32,7 @@ collision_layer = 3
 collision_mask = 3
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Bodies/StaticBody2D"]
+polygon = PoolVector2Array( 251.065, 497.68, 256.677, 443.802, 781.989, 442.68, 778.622, 495.435 )
 
 [node name="PolygonBounds" parent="." instance=ExtResource( 2 )]
 margin_left = 6.0
