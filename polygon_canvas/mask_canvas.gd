@@ -12,11 +12,15 @@ var brush_positions = [] setget set_brush_positions
 var brush_positions_static = [] setget _set_brush_positions_static
 var last_mouse_pos = Vector2.ZERO # ultra jank
 var mouse_is_just_pressed = true
+var currently_drawing = false
 var current_stroke
 var brush_mode = BrushMode.Mode.DYNAMIC
 var bounds = Rect2(Vector2.ZERO, OS.get_window_size())
+var stroke_area = 0
 
 signal new_stroke(brush_index, brush_mode)
+signal positions_added
+signal stopped_drawing
 
 func set_brush_positions(val):
 	brush_positions = val
@@ -37,6 +41,9 @@ func resize_brushes(index, mode):
 		brush_array = brush_positions_static
 	brush_array.resize(index)
 	update()
+
+func last_stroke():
+	return brush_positions.back()
 
 func undo(mode):
 	var brush_array = brush_positions
@@ -70,6 +77,7 @@ func draw_array(arr):
 				])
 			draw_polygon(rect, PoolColorArray([Color.white]))
 
+
 func _draw():
 	draw_array(brush_positions)
 	draw_array(brush_positions_static)
@@ -77,13 +85,21 @@ func _draw():
 
 func _process(_delta):
 	if Input.is_action_just_pressed(mouse_button):
+		currently_drawing = true
 		var brush_array = brush_positions
 		if brush_mode == BrushMode.Mode.STATIC:
 			brush_array = brush_positions_static
 		current_stroke = []
 		brush_array.append(current_stroke)
 		emit_signal("new_stroke", brush_array.size(), brush_mode)
-	if Input.is_action_pressed(mouse_button) && bounds.has_point(last_mouse_pos):
+
+	if currently_drawing && bounds.has_point(last_mouse_pos):
 		current_stroke.append(last_mouse_pos)
+		emit_signal("positions_added")
 		update()
+
+	if (currently_drawing && Input.is_action_just_released(mouse_button)) || stroke_area > 5000:
+		currently_drawing = false
+		stroke_area = 0
+		emit_signal("stopped_drawing")
 		

@@ -93,4 +93,8 @@ __meta__ = {
 }
 
 [connection signal="new_stroke" from="MaskViewportA/MaskCanvas" to="." method="on_new_stroke_a"]
+[connection signal="positions_added" from="MaskViewportA/MaskCanvas" to="." method="on_new_position_a"]
+[connection signal="stopped_drawing" from="MaskViewportA/MaskCanvas" to="." method="on_stopped_drawing_a"]
 [connection signal="new_stroke" from="MaskViewportB/MaskCanvas" to="." method="on_new_stroke_b"]
+[connection signal="positions_added" from="MaskViewportB/MaskCanvas" to="." method="on_new_position_b"]
+[connection signal="stopped_drawing" from="MaskViewportB/MaskCanvas" to="." method="on_stopped_drawing_b"]

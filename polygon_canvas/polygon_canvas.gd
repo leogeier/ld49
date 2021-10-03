@@ -40,29 +40,44 @@ func undo_last_stroke():
 		undo_last_stroke()
 	# last["canvas"].resize_brushes(last["index"], last["brush_mode"])
 
+func stroke_area(stroke):
+	var shapes = shapes_for_stroke(stroke)
+	var polygon = polyBoolean.merge_polygons(shapes)
+	return GoostGeometry2D.polygon_area(polygon[0])
+
+func on_new_position_a():
+	mask_canvas_a.stroke_area = stroke_area(mask_canvas_a.last_stroke())
+
+func on_new_position_b():
+	mask_canvas_b.stroke_area = stroke_area(mask_canvas_b.last_stroke())
+
 func generate_polygons():
 	print("Generating polygons...")
 	return {
-		"a": generate_polygons_for_positions(mask_canvas_a.brush_positions),
-		"a_static": generate_polygons_for_positions(mask_canvas_a.brush_positions_static, true),
-		"b": generate_polygons_for_positions(mask_canvas_b.brush_positions),
-		"b_static": generate_polygons_for_positions(mask_canvas_b.brush_positions_static, true),
+		"a": generate_polygons_for_strokes(mask_canvas_a.brush_positions),
+		"a_static": generate_polygons_for_strokes(mask_canvas_a.brush_positions_static, true),
+		"b": generate_polygons_for_strokes(mask_canvas_b.brush_positions),
+		"b_static": generate_polygons_for_strokes(mask_canvas_b.brush_positions_static, true),
 		}
+
+func on_stopped_drawing_a():
+	print("hello")
+	$ParticlesRed.emitting = false
+
+func on_stopped_drawing_b():
+	$ParticlesBlue.emitting = false
 
 func clear():
 	mask_canvas_a.clear()
 	mask_canvas_b.clear()
 
-func generate_polygons_for_positions(strokes, is_static = false):
+func generate_polygons_for_strokes(strokes, is_static = false):
 	if strokes.empty():
 		print("no strokes to generate circles for")
 		return []
 	var shapes = []
 	for stroke in strokes:
-		for i in range(stroke.size()):
-			shapes.append(generate_circle(stroke[i]))
-			if i > 0:
-				shapes.append(generate_rect(stroke[i], stroke[i - 1]))
+		shapes.append_array(shapes_for_stroke(stroke))
 
 	print("Merging ", shapes.size(), " polygons...")
 	# var merged_polygons = polyBoolean.merge_polygons(circles)
@@ -88,6 +103,14 @@ func generate_polygons_for_positions(strokes, is_static = false):
 
 	return clipped_polygons
 
+func shapes_for_stroke(stroke):
+	var shapes = []
+	for i in range(stroke.size()):
+		shapes.append(generate_circle(stroke[i]))
+		if i > 0:
+			shapes.append(generate_rect(stroke[i], stroke[i - 1]))
+	return shapes
+
 func extract_outermost_polygons(tree):
 	var polygons = []
 	for child in tree.get_children():
@@ -95,7 +118,6 @@ func extract_outermost_polygons(tree):
 	return polygons
 
 func generate_circle(position):
-	print(position)
 	var printed = false
 	var arr = PoolVector2Array()
 	var fcircle_detail = float(circle_detail)
@@ -184,14 +206,10 @@ func _process(_delta):
 	mask_canvas_b.last_mouse_pos = last_mouse_pos
 	update()
 
-	if Input.is_action_pressed("lclick"):
+	if Input.is_action_just_pressed("lclick"):
 		$ParticlesRed.emitting = true
-	else:
-		$ParticlesRed.emitting = false
-	if Input.is_action_pressed("rclick"):
+	if Input.is_action_just_pressed("rclick"):
 		$ParticlesBlue.emitting = true
-	else:
-		$ParticlesBlue.emitting = false
 
 	if dev_mode:
 		if Input.is_action_just_pressed("ui_right"):
