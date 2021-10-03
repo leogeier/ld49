@@ -46,6 +46,7 @@ shape = SubResource( 1 )
 position = Vector2( -0.264862, 0 )
 brush_radius = 10.0
 max_stroke_area = 2500.0
+dev_mode = true
 
 [node name="PolygonBounds" type="ColorRect" parent="PolygonCanvas"]
 margin_left = 1.0
@@ -106,6 +107,8 @@ margin_top = 493.238
 margin_right = 95.3778
 margin_bottom = 563.238
 
+[connection signal="stroke_count_changed" from="PolygonCanvas" to="Interface/StrokeCountB" method="on_stroke_count_changed"]
+[connection signal="stroke_count_changed" from="PolygonCanvas" to="Interface/StrokeCountA" method="on_stroke_count_changed"]
 [connection signal="pressed" from="Interface/UndoButton" to="." method="on_undo_button_pressed"]
 [connection signal="pressed" from="Interface/ClearButton" to="." method="on_clear_button_pressed"]
 [connection signal="pressed" from="Interface/StartButton" to="." method="toggle_running"]

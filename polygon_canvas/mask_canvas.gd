@@ -21,7 +21,7 @@ var stroke_area = 0
 var drawing_enabled = true
 
 signal new_stroke(brush_index, brush_mode)
-signal positions_added
+signal positions_added(brush_mode)
 signal stopped_drawing
 
 func set_brush_positions(val):
@@ -95,18 +95,19 @@ func _draw():
 
 
 func _process(_delta):
+	var brush_array = brush_positions
+	if brush_mode == BrushMode.Mode.STATIC:
+		brush_array = brush_positions_static
+
 	if Input.is_action_just_pressed(mouse_button) && bounds.has_point(last_mouse_pos) && drawing_enabled:
 		currently_drawing = true
-		var brush_array = brush_positions
-		if brush_mode == BrushMode.Mode.STATIC:
-			brush_array = brush_positions_static
 		current_stroke = []
 		brush_array.append(current_stroke)
 		emit_signal("new_stroke", brush_array.size(), brush_mode)
 
-	if currently_drawing && bounds.has_point(last_mouse_pos) && drawing_enabled && !brush_positions.empty():
+	if currently_drawing && bounds.has_point(last_mouse_pos) && drawing_enabled && !brush_array.empty():
 		current_stroke.append(last_mouse_pos)
-		emit_signal("positions_added")
+		emit_signal("positions_added", brush_mode)
 		update()
 
 	if (currently_drawing && Input.is_action_just_released(mouse_button)) || stroke_area > max_stroke_area:

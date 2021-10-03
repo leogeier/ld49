@@ -72,10 +72,14 @@ func stroke_area(stroke):
 	var polygon = polygon_for_stroke(stroke)
 	return GoostGeometry2D.polygon_area(polygon[0])
 
-func on_new_position_a():
+func on_new_position_a(brush_mode):
+	if brush_mode == BrushMode.Mode.STATIC:
+		return
 	mask_canvas_a.stroke_area = stroke_area(mask_canvas_a.last_stroke())
 
-func on_new_position_b():
+func on_new_position_b(brush_mode):
+	if brush_mode == BrushMode.Mode.STATIC:
+		return
 	mask_canvas_b.stroke_area = stroke_area(mask_canvas_b.last_stroke())
 
 func generate_polygons():
