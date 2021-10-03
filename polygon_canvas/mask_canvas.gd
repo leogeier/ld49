@@ -104,7 +104,7 @@ func _process(_delta):
 		brush_array.append(current_stroke)
 		emit_signal("new_stroke", brush_array.size(), brush_mode)
 
-	if currently_drawing && bounds.has_point(last_mouse_pos) && drawing_enabled:
+	if currently_drawing && bounds.has_point(last_mouse_pos) && drawing_enabled && !brush_positions.empty():
 		current_stroke.append(last_mouse_pos)
 		emit_signal("positions_added")
 		update()

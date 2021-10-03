@@ -8,6 +8,7 @@ export(float) var max_stroke_area = 5000
 export(bool) var dev_mode = false
 
 var BrushMode = preload("res://polygon_canvas/brush_mode.gd")
+var SplatterFade = preload("res://splatter_fade/splatter_fade.tscn")
 
 onready var mask_canvas_a = $MaskViewportA/MaskCanvas
 onready var mask_canvas_b = $MaskViewportB/MaskCanvas
@@ -85,6 +86,13 @@ func on_stopped_drawing_b():
 	$ParticlesBlue.emitting = false
 
 func clear():
+	var polygons = generate_polygons()
+	var fade_a = SplatterFade.instance()
+	var fade_b = SplatterFade.instance()
+	add_child(fade_a)
+	add_child(fade_b)
+	fade_a.start_fade(polygons["a"], Color.red)
+	fade_b.start_fade(polygons["b"], Color.blue)
 	mask_canvas_a.clear()
 	mask_canvas_b.clear()
 	emit_stroke_count_changed()
@@ -206,8 +214,13 @@ func _ready():
 	$BrushModeLabel.visible = dev_mode
 	mask_canvas_a.brush_radius = brush_radius
 	mask_canvas_b.brush_radius = brush_radius
-	mask_canvas_a.max_stroke_area = max_stroke_area
-	mask_canvas_b.max_stroke_area = max_stroke_area
+	if dev_mode:
+		mask_canvas_a.max_stroke_area = 1000000
+		mask_canvas_b.max_stroke_area = 1000000
+	else:
+		mask_canvas_a.max_stroke_area = max_stroke_area
+		mask_canvas_b.max_stroke_area = max_stroke_area
+
 
 	if $PolygonBounds != null:
 		var bounds = Rect2($PolygonBounds.rect_position, $PolygonBounds.rect_size)

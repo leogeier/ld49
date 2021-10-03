@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://polygon_canvas/polygon_canvas.gd" type="Script" id=1]
 [ext_resource path="res://polygon_canvas/mask_canvas.gd" type="Script" id=2]
 [ext_resource path="res://paint_particles/paint_particles.tscn" type="PackedScene" id=3]
+[ext_resource path="res://splatter_fade/splatter_fade.tscn" type="PackedScene" id=4]
 
 [sub_resource type="Shader" id=1]
 code = "shader_type canvas_item;
@@ -91,6 +92,8 @@ text = "dynamic"
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="SplatterFade" parent="." instance=ExtResource( 4 )]
 
 [connection signal="new_stroke" from="MaskViewportA/MaskCanvas" to="." method="on_new_stroke_a"]
 [connection signal="positions_added" from="MaskViewportA/MaskCanvas" to="." method="on_new_position_a"]

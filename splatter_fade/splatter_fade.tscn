@@ -1,0 +1,45 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://splatter_fade/splatter_fade.gd" type="Script" id=1]
+
+[sub_resource type="Curve" id=5]
+_data = [ Vector2( 0, 0 ), 0.0, 1.4, 0, 0, Vector2( 1, 1 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="Shader" id=1]
+code = "shader_type canvas_item;
+
+uniform sampler2D noise;
+uniform float progress = 0.0;
+
+void fragment() {
+	vec3 color = texture(TEXTURE, UV).rgb;
+	float alpha = clamp(texture(noise, SCREEN_UV).r + 1.0 - progress * 2.0, 0.0, 1.0);
+	alpha = mix(alpha, 0, step(0.1, color.g)); // dirty fix
+	COLOR = vec4(color, alpha);
+}"
+
+[sub_resource type="OpenSimplexNoise" id=3]
+
+[sub_resource type="NoiseTexture" id=4]
+width = 1024
+height = 576
+noise = SubResource( 3 )
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = SubResource( 1 )
+shader_param/progress = 0.0
+shader_param/noise = SubResource( 4 )
+
+[node name="SplatterFade" type="Node2D"]
+position = Vector2( 512, 288 )
+script = ExtResource( 1 )
+progress_curve = SubResource( 5 )
+
+[node name="Sprite" type="Sprite" parent="."]
+material = SubResource( 2 )
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.479
+one_shot = true
+
+[connection signal="timeout" from="Timer" to="." method="on_timer_end"]

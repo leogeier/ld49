@@ -104,11 +104,11 @@ func _process(_delta):
 	if Input.is_action_just_pressed("toggle"):
 		toggle_running()
 
-	if Input.is_action_just_pressed("undo"):
-		$PolygonCanvas.undo_last_stroke()
-
-	if Input.is_action_just_pressed("clear"):
-		clear_canvas()
+	if !is_running:
+		if Input.is_action_just_pressed("undo"):
+			$PolygonCanvas.undo_last_stroke()
+		if Input.is_action_just_pressed("clear"):
+			clear_canvas()
 
 	if Input.is_action_just_pressed("ui_left"):
 		$PolygonCanvas.load_from_file("res://level/configs/" + $Level.config_file)

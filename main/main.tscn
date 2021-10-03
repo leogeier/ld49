@@ -107,8 +107,6 @@ margin_top = 493.238
 margin_right = 95.3778
 margin_bottom = 563.238
 
-[connection signal="stroke_count_changed" from="PolygonCanvas" to="Interface/StrokeCountA" method="on_stroke_count_changed"]
-[connection signal="stroke_count_changed" from="PolygonCanvas" to="Interface/StrokeCountB" method="on_stroke_count_changed"]
 [connection signal="pressed" from="Interface/UndoButton" to="." method="on_undo_button_pressed"]
 [connection signal="pressed" from="Interface/ClearButton" to="." method="on_clear_button_pressed"]
 [connection signal="pressed" from="Interface/StartButton" to="." method="toggle_running"]
