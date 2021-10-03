@@ -26,6 +26,7 @@ height = 576
 noise = SubResource( 3 )
 
 [sub_resource type="ShaderMaterial" id=2]
+resource_local_to_scene = true
 shader = SubResource( 1 )
 shader_param/progress = 0.0
 shader_param/noise = SubResource( 4 )

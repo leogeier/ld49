@@ -52,16 +52,24 @@ func undo_last_stroke():
 
 	var last = stroke_history.pop_back()
 	print("Undoing stroke ", last)
+	var stroke = last["canvas"].last_stroke()
 	var was_empty = last["canvas"].undo(last["brush_mode"])
 	if was_empty:
 		undo_last_stroke()
 	else:
 		emit_stroke_count_changed()
+		var color = Color.red
+		if last["canvas"] == mask_canvas_b:
+			color = Color.blue
+		fade_polygons(polygon_for_stroke(stroke), color)
 	# last["canvas"].resize_brushes(last["index"], last["brush_mode"])
 
-func stroke_area(stroke):
+func polygon_for_stroke(stroke):
 	var shapes = shapes_for_stroke(stroke)
-	var polygon = polyBoolean.merge_polygons(shapes)
+	return polyBoolean.merge_polygons(shapes)
+
+func stroke_area(stroke):
+	var polygon = polygon_for_stroke(stroke)
 	return GoostGeometry2D.polygon_area(polygon[0])
 
 func on_new_position_a():
@@ -85,14 +93,15 @@ func on_stopped_drawing_a():
 func on_stopped_drawing_b():
 	$ParticlesBlue.emitting = false
 
+func fade_polygons(polygons, color):
+	var fade = SplatterFade.instance()
+	add_child(fade)
+	fade.start_fade(polygons, color)
+
 func clear():
 	var polygons = generate_polygons()
-	var fade_a = SplatterFade.instance()
-	var fade_b = SplatterFade.instance()
-	add_child(fade_a)
-	add_child(fade_b)
-	fade_a.start_fade(polygons["a"], Color.red)
-	fade_b.start_fade(polygons["b"], Color.blue)
+	fade_polygons(polygons["a"], Color.red)
+	fade_polygons(polygons["b"], Color.blue)
 	mask_canvas_a.clear()
 	mask_canvas_b.clear()
 	emit_stroke_count_changed()

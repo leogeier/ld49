@@ -56,10 +56,20 @@ func remove_children(node):
 	for child in node.get_children():
 		child.queue_free()
 
+func clear_bodies_node(node, fade_color):
+	var polygons = []
+	for child in node.get_children():
+		var polygon = PoolVector2Array()
+		for point in child.polygon:
+			polygon.append(child.global_transform.xform(point))
+		polygons.append(polygon)
+	$PolygonCanvas.fade_polygons(polygons, fade_color)
+
+	remove_children(node)
+
 func clear_bodies():
-	remove_children($A)
-	remove_children($B)
-	# $PolygonCanvas.clear()
+	clear_bodies_node($A, Color.red)
+	clear_bodies_node($B, Color.blue)
 
 func on_undo_button_pressed():
 	$PolygonCanvas.undo_last_stroke()

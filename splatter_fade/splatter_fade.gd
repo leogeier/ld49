@@ -21,6 +21,7 @@ func start_fade(polygons, color = Color.red):
 	image_texture.create_from_image(image)
 	$Sprite.texture = image_texture
 
+	print($Timer.is_stopped())
 	$Timer.start()
 
 func on_timer_end():

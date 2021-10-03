@@ -46,7 +46,6 @@ shape = SubResource( 1 )
 position = Vector2( -0.264862, 0 )
 brush_radius = 10.0
 max_stroke_area = 2500.0
-dev_mode = true
 
 [node name="PolygonBounds" type="ColorRect" parent="PolygonCanvas"]
 margin_left = 1.0
