@@ -63,12 +63,17 @@ func clear():
 func on_undo_button_pressed():
 	$PolygonCanvas.undo_last_stroke()
 
+func on_clear_button_pressed():
+	$PolygonCanvas.clear()
+
 func _ready():
 	pass
 
 
 func _process(_delta):
 	if Input.is_action_just_pressed("toggle"):
+		$Interface/UndoButton.disabled = true
+		$Interface/ClearButton.disabled = true
 		var polygons = $PolygonCanvas.generate_polygons()
 		print("Creating bodies")
 		create_bodies(polygons["a"], Color.red, 0, $A)
@@ -81,6 +86,8 @@ func _process(_delta):
 		$PolygonCanvas.visible = false
 	if Input.is_action_just_pressed("ui_cancel"):
 		$PolygonCanvas.visible = true
+		$Interface/UndoButton.disabled = false
+		$Interface/ClearButton.disabled = false
 		clear()
 	if Input.is_action_just_pressed("undo"):
 		$PolygonCanvas.undo_last_stroke()

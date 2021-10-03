@@ -25,11 +25,13 @@ func add_stroke_to_history(brush_index, bmode, canvas):
 
 func on_new_stroke_a(brush_index, bmode):
 	print("New stroke for A")
+	$ParticlesRed.emitting = true
 	add_stroke_to_history(brush_index, bmode, mask_canvas_a)
 	emit_stroke_count_changed()
 
 func on_new_stroke_b(brush_index, bmode):
 	print("New stroke for B")
+	$ParticlesBlue.emitting = true
 	add_stroke_to_history(brush_index, bmode, mask_canvas_b)
 	emit_stroke_count_changed()
 
@@ -79,6 +81,7 @@ func on_stopped_drawing_b():
 func clear():
 	mask_canvas_a.clear()
 	mask_canvas_b.clear()
+	emit_stroke_count_changed()
 
 func generate_polygons_for_strokes(strokes, is_static = false):
 	if strokes.empty():
@@ -216,11 +219,6 @@ func _process(_delta):
 	mask_canvas_a.last_mouse_pos = last_mouse_pos
 	mask_canvas_b.last_mouse_pos = last_mouse_pos
 	update()
-
-	if Input.is_action_just_pressed("lclick"):
-		$ParticlesRed.emitting = true
-	if Input.is_action_just_pressed("rclick"):
-		$ParticlesBlue.emitting = true
 
 	if dev_mode:
 		if Input.is_action_just_pressed("ui_right"):
