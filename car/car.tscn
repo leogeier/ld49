@@ -1,0 +1,34 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://car/car_body.png" type="Texture" id=1]
+[ext_resource path="res://car/wheel.tscn" type="PackedScene" id=2]
+
+[node name="Car" type="RigidBody2D" groups=[
+"car",
+]]
+continuous_cd = 2
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+position = Vector2( -2.83653, -4.17138 )
+polygon = PoolVector2Array( -13.1876, -6.33438, -7.34766, -21.1845, 14.6772, -23.8541, 22.0188, -6.00066, 33.365, -4.99953, 35.3672, 12.3534, -29.7062, 12.1865, -29.8731, -1.82929, -26.7028, -6.00066 )
+
+[node name="RearWheel" parent="." instance=ExtResource( 2 )]
+position = Vector2( -20.2101, 6.61233 )
+
+[node name="RearJoint" type="PinJoint2D" parent="."]
+position = Vector2( -20.21, 6.612 )
+scale = Vector2( 1, 1 )
+node_a = NodePath("../RearWheel")
+node_b = NodePath("..")
+
+[node name="FrontWheel" parent="." instance=ExtResource( 2 )]
+position = Vector2( 18.5324, 7.71476 )
+
+[node name="FrontJoint" type="PinJoint2D" parent="."]
+position = Vector2( 18.532, 7.715 )
+node_a = NodePath("../FrontWheel")
+node_b = NodePath("..")
+
+[node name="BodySprite" type="Sprite" parent="."]
+position = Vector2( -0.500565, -20.1895 )
+texture = ExtResource( 1 )
