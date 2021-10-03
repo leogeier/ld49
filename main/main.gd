@@ -9,6 +9,7 @@ var is_running = false
 
 var level_list = [
 	preload("res://level/level1.tscn"),
+	preload("res://level/level2.tscn"),
 	preload("res://level/level_sandbox.tscn"),
 	]
 

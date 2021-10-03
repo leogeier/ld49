@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://level/level.gd" type="Script" id=1]
 [ext_resource path="res://car/car.tscn" type="PackedScene" id=2]
 [ext_resource path="res://flag/flag.tscn" type="PackedScene" id=3]
 [ext_resource path="res://polygon_bounds/PolygonBounds.tscn" type="PackedScene" id=4]
+[ext_resource path="res://level/font_small.tres" type="DynamicFont" id=5]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 512, 53.541 )
@@ -47,5 +48,21 @@ margin_right = 670.0
 margin_bottom = 384.0
 
 [node name="Connectables" type="Node2D" parent="."]
+
+[node name="Label" type="Label" parent="."]
+margin_left = 728.568
+margin_top = 336.408
+margin_right = 990.568
+margin_bottom = 403.408
+rect_rotation = 7.7
+custom_fonts/font = ExtResource( 5 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "Left Click to draw red Strokes"
+align = 1
+valign = 1
+autowrap = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [connection signal="flag_reached" from="Flag" to="." method="condition_fulfilled"]
