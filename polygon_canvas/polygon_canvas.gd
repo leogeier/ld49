@@ -3,6 +3,7 @@ extends Node2D
 export(int) var mouse_button = BUTTON_LEFT
 export(float) var brush_radius = 20
 export(int) var circle_detail = 20
+export(float) var max_stroke_area = 5000
 
 export(bool) var dev_mode = false
 
@@ -188,6 +189,8 @@ func _ready():
 	$BrushModeLabel.visible = dev_mode
 	mask_canvas_a.brush_radius = brush_radius
 	mask_canvas_b.brush_radius = brush_radius
+	mask_canvas_a.max_stroke_area = max_stroke_area
+	mask_canvas_b.max_stroke_area = max_stroke_area
 
 	if $PolygonBounds != null:
 		var bounds = Rect2($PolygonBounds.rect_position, $PolygonBounds.rect_size)

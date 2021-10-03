@@ -2,6 +2,7 @@ extends ColorRect
 
 
 export(String, "lclick", "rclick") var mouse_button = "lclick"
+export(float) var max_stroke_area = 5000
 
 onready var project_size = Vector2(ProjectSettings.get_setting("display/window/size/width"), ProjectSettings.get_setting("display/window/size/height"))
 
@@ -98,7 +99,7 @@ func _process(_delta):
 		emit_signal("positions_added")
 		update()
 
-	if (currently_drawing && Input.is_action_just_released(mouse_button)) || stroke_area > 5000:
+	if (currently_drawing && Input.is_action_just_released(mouse_button)) || stroke_area > max_stroke_area:
 		currently_drawing = false
 		stroke_area = 0
 		emit_signal("stopped_drawing")
