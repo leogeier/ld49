@@ -72,13 +72,13 @@ func stroke_area(stroke):
 	var polygon = polygon_for_stroke(stroke)
 	return GoostGeometry2D.polygon_area(polygon[0])
 
-func on_new_position_a(brush_mode):
-	if brush_mode == BrushMode.Mode.STATIC:
+func on_new_position_a(mode):
+	if mode == BrushMode.Mode.STATIC:
 		return
 	mask_canvas_a.stroke_area = stroke_area(mask_canvas_a.last_stroke())
 
-func on_new_position_b(brush_mode):
-	if brush_mode == BrushMode.Mode.STATIC:
+func on_new_position_b(mode):
+	if mode == BrushMode.Mode.STATIC:
 		return
 	mask_canvas_b.stroke_area = stroke_area(mask_canvas_b.last_stroke())
 
@@ -110,6 +110,11 @@ func clear():
 	mask_canvas_b.clear()
 	emit_stroke_count_changed()
 
+func get_adjusted_bounds_size():
+	var bounds_size = Rect2($PolygonBounds.rect_position, $PolygonBounds.rect_size)
+	bounds_size.grow(brush_radius / 2)
+	return bounds_size
+
 func generate_polygons_for_strokes(strokes, is_static = false):
 	if strokes.empty():
 		print("no strokes to generate circles for")
@@ -123,24 +128,25 @@ func generate_polygons_for_strokes(strokes, is_static = false):
 	var merged_polygons = extract_outermost_polygons(polyBoolean.boolean_polygons_tree(shapes, [], PolyBoolean2D.OP_UNION))
 	print(merged_polygons.size(), " polygons after merge")
 
-	if $PolygonBounds == null || is_static:
-		return merged_polygons
+	return merged_polygons
 
-	print("Clipping...")
-	var bounds_position = $PolygonBounds.rect_position
-	var bounds_size = $PolygonBounds.rect_size
-	var bounding_polygon = PoolVector2Array([
-		bounds_position + Vector2(0, 0),
-		bounds_position + Vector2(bounds_size.x, 0),
-		bounds_position + bounds_size,
-		bounds_position + Vector2(0, bounds_size.y)
-		])
-	var clipped_polygons = []
-	for polygon in merged_polygons:
-		clipped_polygons.append_array(GoostGeometry2D.intersect_polygons(polygon, bounding_polygon))
-	print(clipped_polygons.size(), " polygons after clipping")
+	# if $PolygonBounds == null || is_static:
+	# 	return merged_polygons
 
-	return clipped_polygons
+	# print("Clipping...")
+	# var bounds_size = get_adjusted_bounds_size()
+	# var bounding_polygon = PoolVector2Array([
+	# 	bounds_size.position,
+	# 	bounds_size.position + Vector2(bounds_size.size.x, 0),
+	# 	bounds_size.position + bounds_size.size,
+	# 	bounds_size.position + Vector2(0, bounds_size.size.y)
+	# 	])
+	# var clipped_polygons = []
+	# for polygon in merged_polygons:
+	# 	clipped_polygons.append_array(GoostGeometry2D.intersect_polygons(polygon, bounding_polygon))
+	# print(clipped_polygons.size(), " polygons after clipping")
+
+	# return clipped_polygons
 
 func shapes_for_stroke(stroke):
 	var shapes = []
@@ -235,7 +241,7 @@ func _ready():
 		mask_canvas_b.max_stroke_area = max_stroke_area
 
 
-	if $PolygonBounds != null:
+	if $PolygonBounds != null && !dev_mode:
 		var bounds = Rect2($PolygonBounds.rect_position, $PolygonBounds.rect_size)
 		mask_canvas_a.bounds = bounds
 		mask_canvas_b.bounds = bounds

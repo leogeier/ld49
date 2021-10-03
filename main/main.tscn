@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://polygon_canvas/polygon_canvas.tscn" type="PackedScene" id=1]
 [ext_resource path="res://canvas.png" type="Texture" id=2]
@@ -11,6 +11,7 @@
 [ext_resource path="res://clear_button/clear_button.tscn" type="PackedScene" id=9]
 [ext_resource path="res://start_button/start_button.tscn" type="PackedScene" id=10]
 [ext_resource path="res://stop_button/stop_button.tscn" type="PackedScene" id=11]
+[ext_resource path="res://main/dotted_outline.png" type="Texture" id=12]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 1000, 336 )
@@ -48,15 +49,18 @@ brush_radius = 10.0
 max_stroke_area = 2500.0
 dev_mode = true
 
-[node name="PolygonBounds" type="ColorRect" parent="PolygonCanvas"]
-margin_left = 1.0
-margin_top = -1.0
-margin_right = 1025.0
-margin_bottom = 469.0
-color = Color( 1, 1, 1, 0.109804 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+[node name="PolygonBounds" type="NinePatchRect" parent="PolygonCanvas"]
+margin_left = 97.0
+margin_top = 53.0
+margin_right = 932.0
+margin_bottom = 396.0
+texture = ExtResource( 12 )
+patch_margin_left = 18
+patch_margin_top = 18
+patch_margin_right = 18
+patch_margin_bottom = 18
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
 
 [node name="title" type="Sprite" parent="."]
 visible = false
@@ -78,15 +82,15 @@ margin_bottom = 562.127
 [node name="StrokeCountB" parent="Interface" instance=ExtResource( 8 )]
 margin_left = 29.0
 margin_top = 530.657
-margin_right = 534.0
+margin_right = 451.0
 margin_bottom = 600.657
 type = "b"
 
 [node name="StrokeCountA" parent="Interface" instance=ExtResource( 8 )]
 margin_left = 29.0
-margin_top = 485.657
-margin_right = 534.0
-margin_bottom = 555.657
+margin_top = 486.0
+margin_right = 451.0
+margin_bottom = 556.0
 
 [node name="ClearButton" parent="Interface" instance=ExtResource( 9 )]
 margin_left = 927.842
@@ -107,8 +111,8 @@ margin_top = 493.238
 margin_right = 95.3778
 margin_bottom = 563.238
 
-[connection signal="stroke_count_changed" from="PolygonCanvas" to="Interface/StrokeCountB" method="on_stroke_count_changed"]
 [connection signal="stroke_count_changed" from="PolygonCanvas" to="Interface/StrokeCountA" method="on_stroke_count_changed"]
+[connection signal="stroke_count_changed" from="PolygonCanvas" to="Interface/StrokeCountB" method="on_stroke_count_changed"]
 [connection signal="pressed" from="Interface/UndoButton" to="." method="on_undo_button_pressed"]
 [connection signal="pressed" from="Interface/ClearButton" to="." method="on_clear_button_pressed"]
 [connection signal="pressed" from="Interface/StartButton" to="." method="toggle_running"]

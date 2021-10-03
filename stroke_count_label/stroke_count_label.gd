@@ -17,7 +17,7 @@ func on_stroke_count_changed(count_a, count_b):
 		coloring = "[color=#aa0000]%s[/color]"
 	var counter = "%d/%d" % [count, stroke_limit]
 	var colored_counter = coloring % counter
-	bbcode_text = "[right]%s Strokes  Left:   %s[/right]" % [color_name[type], colored_counter]
+	bbcode_text = "[right]%s Strokes:   %s[/right]" % [color_name[type], colored_counter]
 
 func _ready():
 	on_stroke_count_changed(0, 0)
