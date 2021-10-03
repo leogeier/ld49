@@ -46,6 +46,15 @@ func resize_brushes(index, mode):
 func last_stroke():
 	return brush_positions.back()
 
+func stroke_count():
+	var count = 0
+	for stroke in brush_positions:
+		if stroke != []:
+			count += 1
+	if currently_drawing:
+		count += 1
+	return count
+
 func undo(mode):
 	var brush_array = brush_positions
 	if mode == BrushMode.Mode.STATIC:
@@ -85,7 +94,7 @@ func _draw():
 
 
 func _process(_delta):
-	if Input.is_action_just_pressed(mouse_button):
+	if Input.is_action_just_pressed(mouse_button) && bounds.has_point(last_mouse_pos):
 		currently_drawing = true
 		var brush_array = brush_positions
 		if brush_mode == BrushMode.Mode.STATIC:

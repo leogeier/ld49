@@ -4,7 +4,7 @@
 [ext_resource path="res://undo_button/undo_hover.png" type="Texture" id=2]
 [ext_resource path="res://undo_button/undo_clicked.png" type="Texture" id=3]
 
-[node name="Control" type="TextureButton"]
+[node name="UndoButton" type="TextureButton"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_right = -954.0

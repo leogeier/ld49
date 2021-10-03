@@ -17,6 +17,8 @@ var last_mouse_pos = Vector2.ZERO
 var stroke_history = []
 var brush_mode = BrushMode.Mode.DYNAMIC
 
+signal stroke_count_changed(count_a, count_b)
+
 func add_stroke_to_history(brush_index, bmode, canvas):
 	stroke_history.append({"index": brush_index, "canvas": canvas, "brush_mode": bmode})
 	print(stroke_history)
@@ -24,10 +26,15 @@ func add_stroke_to_history(brush_index, bmode, canvas):
 func on_new_stroke_a(brush_index, bmode):
 	print("New stroke for A")
 	add_stroke_to_history(brush_index, bmode, mask_canvas_a)
+	emit_stroke_count_changed()
 
 func on_new_stroke_b(brush_index, bmode):
 	print("New stroke for B")
 	add_stroke_to_history(brush_index, bmode, mask_canvas_b)
+	emit_stroke_count_changed()
+
+func emit_stroke_count_changed():
+	emit_signal("stroke_count_changed", mask_canvas_a.stroke_count(), mask_canvas_b.stroke_count())
 
 func undo_last_stroke():
 	if stroke_history.empty():
@@ -39,6 +46,8 @@ func undo_last_stroke():
 	var was_empty = last["canvas"].undo(last["brush_mode"])
 	if was_empty:
 		undo_last_stroke()
+	else:
+		emit_stroke_count_changed()
 	# last["canvas"].resize_brushes(last["index"], last["brush_mode"])
 
 func stroke_area(stroke):
@@ -62,7 +71,6 @@ func generate_polygons():
 		}
 
 func on_stopped_drawing_a():
-	print("hello")
 	$ParticlesRed.emitting = false
 
 func on_stopped_drawing_b():
