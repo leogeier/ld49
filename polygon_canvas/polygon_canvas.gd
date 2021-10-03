@@ -116,6 +116,7 @@ func clear():
 	fade_polygons(polygons["b"], Color.blue)
 	mask_canvas_a.clear()
 	mask_canvas_b.clear()
+	stroke_history = []
 	emit_stroke_count_changed()
 
 func get_adjusted_bounds_size():
