@@ -156,9 +156,10 @@ func load_level():
 	$PolygonCanvas.set_bounds(level.get_node(@"PolygonBounds"))
 	$LevelContainer.add_child(level)
 	$Interface/StrokeCountA.stroke_limit = level.max_strokes_a
-	$Interface/StrokeCountA.on_stroke_count_changed(0, 0)
+	# $Interface/StrokeCountA.on_stroke_count_changed(0, 0)
 	$Interface/StrokeCountB.stroke_limit = level.max_strokes_b
-	$Interface/StrokeCountB.on_stroke_count_changed(0, 0)
+	# $Interface/StrokeCountB.on_stroke_count_changed(0, 0)
+	$PolygonCanvas.emit_stroke_count_changed()
 
 func on_level_complete():
 	$Interface/Continue.visible = true

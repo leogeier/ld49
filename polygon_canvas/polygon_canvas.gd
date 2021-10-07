@@ -137,7 +137,15 @@ func generate_polygons_for_strokes(strokes, is_static = false):
 	var merged_polygons = extract_outermost_polygons(polyBoolean.boolean_polygons_tree(shapes, [], PolyBoolean2D.OP_UNION))
 	print(merged_polygons.size(), " polygons after merge")
 
-	return merged_polygons
+	# return merged_polygons
+	
+	print("Simplifying...")
+	var simplified_polygons = []
+	for polygon in merged_polygons:
+		simplified_polygons.append(GoostGeometry2D.simplify_polyline(polygon, 1.0))
+		print("Reduced number of points from ", polygon.size(), " to ", simplified_polygons.back().size())
+
+	return simplified_polygons
 
 	# if $PolygonBounds == null || is_static:
 	# 	return merged_polygons

@@ -16,7 +16,15 @@ func set_polygon(new_polygon):
 		point -= centroid
 		polygon.set(i, point)
 
-	$CollisionPolygon2D.polygon = polygon
+	var convex_polygons = PolyDecomp2D.decompose_polygons_into_convex([polygon])
+	for convex_polygon in convex_polygons:
+		var shape = ConvexPolygonShape2D.new()
+		shape.points = convex_polygon
+		var shape_node = CollisionShape2D.new()
+		shape_node.shape = shape
+		add_child(shape_node)
+
+	# $CollisionPolygon2D.polygon = polygon
 	$Polygon2D.polygon = polygon
 
 func set_color(color):
