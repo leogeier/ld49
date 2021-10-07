@@ -30,6 +30,14 @@ func translated_polygon(polygon, offset):
 	return translated
 
 func create_bodies(polygons, color, layer, parent_node, dynamic = true):
+	var ground_polygons = []
+	for child in $LevelContainer.get_child(0).get_node(@"Bodies").get_children():
+		for child_shape in child.get_children():
+			ground_polygons.append(child_shape.polygon)
+	print("grounds ", ground_polygons.size())
+
+	polygons = PolyBoolean2D.clip_polygons(polygons, ground_polygons)
+
 	for polygon in polygons:
 		var centroid = GoostGeometry2D.polygon_centroid(polygon)
 		var offset_polygon = translated_polygon(polygon, -centroid)

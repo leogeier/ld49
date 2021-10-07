@@ -9,6 +9,7 @@ func on_body_entered(body):
 		if !body.has_arrived:
 			body.has_arrived = true
 			emit_signal("car_arrived")
+			$Particles2D.emitting = true
 
 
 func _ready():
