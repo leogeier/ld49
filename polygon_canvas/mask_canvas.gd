@@ -17,7 +17,8 @@ var currently_drawing = false
 var current_stroke
 var brush_mode = BrushMode.Mode.DYNAMIC
 var bounds = Rect2(Vector2.ZERO, OS.get_window_size())
-var stroke_area = 0
+var prev_stroke_area = 0
+var stroke_area = 0 setget set_stroke_area
 var drawing_enabled = true
 
 signal new_stroke(brush_index, brush_mode)
@@ -31,6 +32,11 @@ func set_brush_positions(val):
 func _set_brush_positions_static(val):
 	brush_positions_static = val
 	update()
+
+func set_stroke_area(val):
+	prev_stroke_area = stroke_area
+	stroke_area = val
+	print("Stroke area: ", stroke_area, " prev: ", prev_stroke_area)
 
 func clear():
 	brush_positions.clear()
@@ -88,6 +94,13 @@ func draw_array(arr):
 				])
 			draw_polygon(rect, PoolColorArray([Color.white]))
 
+func adjust_stroke_area():
+	print("adjusting stroke")
+	var dir = current_stroke[-2].direction_to(current_stroke[-1])
+	var true_area = max_stroke_area - prev_stroke_area
+	var distance = true_area / (brush_radius * 2)
+	current_stroke[-1] = current_stroke[-2] + dir * distance
+
 
 func _draw():
 	draw_array(brush_positions)
@@ -112,6 +125,8 @@ func _process(_delta):
 
 	if (currently_drawing && Input.is_action_just_released(mouse_button)) || stroke_area > max_stroke_area || !bounds.has_point(last_mouse_pos):
 		currently_drawing = false
+		if stroke_area > max_stroke_area:
+			adjust_stroke_area()
 		stroke_area = 0
 		emit_signal("stopped_drawing")
 		
