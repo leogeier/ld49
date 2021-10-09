@@ -1,0 +1,97 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://level/font_small.tres" type="DynamicFont" id=1]
+[ext_resource path="res://polygon_bounds/PolygonBounds.tscn" type="PackedScene" id=2]
+[ext_resource path="res://level/level.gd" type="Script" id=3]
+[ext_resource path="res://car/car.tscn" type="PackedScene" id=4]
+[ext_resource path="res://button/button.tscn" type="PackedScene" id=5]
+[ext_resource path="res://flag/flag.tscn" type="PackedScene" id=6]
+[ext_resource path="res://connectable/connectable.tscn" type="PackedScene" id=7]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 512, 53.541 )
+
+[node name="Level" type="Node2D"]
+script = ExtResource( 3 )
+max_strokes_a = 3
+max_strokes_b = 2
+
+[node name="Ground" type="StaticBody2D" parent="."]
+position = Vector2( 512, 523 )
+collision_layer = 3
+collision_mask = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ground"]
+shape = SubResource( 1 )
+
+[node name="Bodies" type="Node2D" parent="."]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Bodies"]
+collision_layer = 3
+collision_mask = 3
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Bodies/StaticBody2D"]
+polygon = PoolVector2Array( 163.202, 208.608, -26.4937, 226.568, -24.7897, 337.819, 588.673, 352.036, 742.393, 348.916, 751.372, 251.262, 745.102, 226.552, 1165.76, 164.644, 1145.39, 671.906, -125.174, 655.424, -72.4095, 109.085, 108.202, 122.179, 168.815, 99.7295, 202.488, 75.0353, 252.999, 67.1781, 303.51, 99.7295, 345.041, 121.056, 395.552, 139.016, 535.86, 167.077, 536.982, 189.526, 431.471, 176.057, 297.898, 174.934 )
+
+[node name="PolygonBounds" parent="." instance=ExtResource( 2 )]
+margin_left = 336.0
+margin_top = 164.0
+margin_right = 570.0
+
+[node name="Connectables" type="Node2D" parent="."]
+
+[node name="Connectable" parent="Connectables" instance=ExtResource( 7 )]
+position = Vector2( -142, 40 )
+
+[node name="Polygon2D" type="PolyCircle2D" parent="."]
+modulate = Color( 0.647059, 0, 0, 1 )
+position = Vector2( -83.1031, 111.33 )
+radius = 10.0
+
+[node name="Flag" parent="." instance=ExtResource( 6 )]
+modulate = Color( 0, 1, 0, 1 )
+position = Vector2( 910.132, 185.381 )
+collision_layer = 3
+collision_mask = 3
+
+[node name="Flag2" parent="." instance=ExtResource( 6 )]
+modulate = Color( 1, 0, 0, 1 )
+position = Vector2( 663.776, 332.864 )
+
+[node name="Flag3" parent="." instance=ExtResource( 6 )]
+modulate = Color( 0, 0, 1, 1 )
+position = Vector2( -361.99, 182.756 )
+collision_layer = 2
+collision_mask = 2
+
+[node name="Car" parent="." instance=ExtResource( 4 )]
+position = Vector2( 50.7387, 99.2355 )
+
+[node name="Car3" parent="." instance=ExtResource( 4 )]
+modulate = Color( 1, 0, 0, 1 )
+position = Vector2( 458.358, 325.644 )
+collision_layer = 1
+collision_mask = 1
+
+[node name="Button" parent="." instance=ExtResource( 5 )]
+position = Vector2( -186.142, 348.271 )
+
+[node name="Label" type="Label" parent="."]
+margin_left = -274.347
+margin_top = 81.4541
+margin_right = -210.347
+margin_bottom = 113.454
+custom_fonts/font = ExtResource( 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "text"
+align = 1
+valign = 1
+autowrap = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="car_arrived" from="Flag" to="." method="car_arrived"]
+[connection signal="car_arrived" from="Flag2" to="." method="car_arrived"]
+[connection signal="car_arrived" from="Flag3" to="." method="car_arrived"]
+[connection signal="button_clicked" from="Button" to="." method="condition_fulfilled"]
